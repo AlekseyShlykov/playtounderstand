@@ -116,16 +116,17 @@ export function TagsSection() {
       const next: Record<string, { x: number; y: number; r: number }> = {};
       for (const id of ids) {
         // Scatter, but keep it subtle enough to read.
-        const x = (Math.random() - 0.5) * 120;
-        const y = (Math.random() - 0.5) * 70;
-        const r = (Math.random() - 0.5) * 10;
+        const x = (Math.random() - 0.5) * 140;
+        const y = (Math.random() - 0.5) * 80;
+        const r = (Math.random() - 0.5) * 6;
         next[id] = { x, y, r };
       }
       setJitter(next);
     };
 
     tick();
-    intervalRef.current = window.setInterval(tick, 250);
+    // Slower updates + longer CSS transitions = smoother motion.
+    intervalRef.current = window.setInterval(tick, 650);
 
     timeoutRef.current = window.setTimeout(() => {
       if (intervalRef.current) window.clearInterval(intervalRef.current);

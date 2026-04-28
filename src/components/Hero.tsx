@@ -23,12 +23,24 @@ function FlaskIcon() {
   );
 }
 
+function MicroscopeIcon() {
+  return (
+    <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" focusable="false">
+      <path
+        d="M9.2 2.6a2.2 2.2 0 0 1 3.1 0l2 2a2.2 2.2 0 0 1 0 3.1l-1.1 1.1 1.5 1.5c1.5 1.5 2.3 3.4 2.3 5.5V17h1a2 2 0 0 1 2 2v1H4v-1a2 2 0 0 1 2-2h7v-1.2c0-1.5-.6-2.8-1.6-3.9l-1.5-1.5-1.1 1.1a2.2 2.2 0 0 1-3.1 0l-2-2a2.2 2.2 0 0 1 0-3.1l5.5-5.5Zm1.5 1.4L5.2 9.5a.2.2 0 0 0 0 .3l2 2a.2.2 0 0 0 .3 0l5.5-5.5a.2.2 0 0 0 0-.3l-2-2a.2.2 0 0 0-.3 0Z"
+        fill="currentColor"
+      />
+      <path d="M6 21h14v1H6v-1Z" fill="currentColor" opacity=".18" />
+    </svg>
+  );
+}
+
 export function Hero({ onOpenSubscribe }: { onOpenSubscribe: () => void }) {
   const [pouring, setPouring] = useState(false);
 
   useEffect(() => {
     if (!pouring) return;
-    const t = window.setTimeout(() => setPouring(false), 2400);
+    const t = window.setTimeout(() => setPouring(false), 4000);
     return () => window.clearTimeout(t);
   }, [pouring]);
 
@@ -82,6 +94,9 @@ export function Hero({ onOpenSubscribe }: { onOpenSubscribe: () => void }) {
               className="btn btnSecondary"
               onClick={onOpenSubscribe}
             >
+              <span className="btnIconMobile" aria-hidden="true">
+                <MicroscopeIcon />
+              </span>
               New game alerts
             </button>
             <ButtonLink
