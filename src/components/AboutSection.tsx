@@ -122,14 +122,14 @@ export function AboutSection() {
           >
             Patreon
           </ExternalLink>{' '}
-          (back new games),{' '}
+          (support new games),{' '}
           <ExternalLink
             href="https://buildtounderstand.substack.com/"
             ariaLabel="Blog (Substack)"
           >
             Blog
           </ExternalLink>{' '}
-          (occasional notes).
+          (dev notes).
         </p>
       </div>
       {spotlight ? <div className="aboutSpotlightOverlay" aria-hidden="true" /> : null}

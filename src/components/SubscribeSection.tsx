@@ -84,7 +84,6 @@ export function SubscribeSection() {
             <ul className="promiseList">
               <li>One email per game. Sometimes none.</li>
               <li>Also: my notes on the games (the parts I couldn’t fit in).</li>
-              <li>No drip funnel. No “you forgot something”.</li>
               <li>Two clicks to unsubscribe. Always.</li>
             </ul>
           </div>

@@ -215,10 +215,13 @@ export function TagsSection() {
     requestAnimationFrame(() => {
       setRepelling(true);
       timeoutRef.current = window.setTimeout(() => {
-        setRepelling(false);
         setMotion({});
         setFlip({});
         setFlipping(false);
+        // On mobile Safari especially, removing the animation class in the same tick
+        // can cause a 1-frame snap to the base transition. Clear vars first, then
+        // drop the class on the next frame.
+        requestAnimationFrame(() => setRepelling(false));
       }, 1500);
     });
   }, [order]);
