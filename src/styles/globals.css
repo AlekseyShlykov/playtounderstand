@@ -241,17 +241,20 @@ a{color: inherit; text-decoration-thickness: 1px; text-underline-offset: 3px}
   transform: rotate(90deg) translateY(-1px);
 }
 
-.heroCopyTilting{transform-origin: left bottom}
-.heroCopyTilting > *{animation: slideOff 1.4s cubic-bezier(.2,.9,.2,1) 1 both}
-.heroCopyTilting .heroTitle{animation: slideOff 1.4s cubic-bezier(.2,.9,.2,1) 1 both}
-.heroCopyTilting .brandTools{animation: none}
-.heroCopyTilting::before{opacity: 0}
-.heroCopyTilting::after{opacity: 0}
+/* footer tilt */
+.footerBrandBlock{display:flex; flex-direction:column; gap: 4px}
+.footerBrandRow{display:flex; align-items:center; gap: 10px}
+.footerTagline{margin: 0}
+.footerBrandBlockTilt{transform-origin: left bottom}
+.footerBrandBlockTilt .footerBrand,
+.footerBrandBlockTilt .footerTagline{
+  animation: footerSlideOff 4.2s cubic-bezier(.2,.9,.2,1) 1 both;
+}
 
-@keyframes slideOff{
+@keyframes footerSlideOff{
   0%{transform: rotate(0deg) translate(0,0); opacity: 1}
-  15%{transform: rotate(8deg) translate(0,0); opacity: 1}
-  100%{transform: rotate(8deg) translate(140vw, 40vh); opacity: 0}
+  18%{transform: rotate(10deg) translate(0,0); opacity: 1}
+  100%{transform: rotate(10deg) translate(160vw, 38vh); opacity: 0}
 }
 
 .heroCopyPouring::before{

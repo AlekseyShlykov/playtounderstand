@@ -26,6 +26,7 @@ export function AboutSection() {
   const [spotlight, setSpotlight] = useState(false);
   const [pos, setPos] = useState({ x: 0, y: 0 });
   const timeoutRef = useRef<number | null>(null);
+  const sectionRef = useRef<HTMLElement | null>(null);
 
   useEffect(() => {
     return () => {
@@ -33,8 +34,9 @@ export function AboutSection() {
     };
   }, []);
 
-  function startSpotlight() {
+  function startSpotlight(at?: { x: number; y: number }) {
     if (timeoutRef.current) window.clearTimeout(timeoutRef.current);
+    if (at) setPos(at);
     setSpotlight(true);
     timeoutRef.current = window.setTimeout(() => setSpotlight(false), 4000);
   }
@@ -44,6 +46,9 @@ export function AboutSection() {
       className={spotlight ? 'section aboutSpotlightOn' : 'section'}
       id="about"
       aria-labelledby="about-title"
+      ref={(el) => {
+        sectionRef.current = el;
+      }}
       style={
         spotlight
           ? ({
@@ -81,7 +86,17 @@ export function AboutSection() {
             className={spotlight ? 'iconBtn iconBtnActive' : 'iconBtn'}
             onClick={(e) => {
               e.stopPropagation();
-              startSpotlight();
+              const section = sectionRef.current;
+              if (section) {
+                const s = section.getBoundingClientRect();
+                const b = (e.currentTarget as HTMLElement).getBoundingClientRect();
+                startSpotlight({
+                  x: b.left - s.left + b.width / 2,
+                  y: b.top - s.top + b.height / 2,
+                });
+              } else {
+                startSpotlight();
+              }
             }}
             aria-label="Flashlight mode"
             title="Flashlight mode"

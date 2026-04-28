@@ -23,22 +23,6 @@ function FlaskIcon() {
   );
 }
 
-function RampIcon() {
-  return (
-    <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" focusable="false">
-      <path
-        d="M4 18h16v2H4v-2Zm2.2-2 11-8.4a2 2 0 0 1 3.2 1.6V16H6.2Z"
-        fill="currentColor"
-      />
-      <path
-        d="M7.4 16h12V9.2c0-.5-.6-.8-1-.5L7.4 16Z"
-        fill="currentColor"
-        opacity=".18"
-      />
-    </svg>
-  );
-}
-
 function MicroscopeIcon() {
   return (
     <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" focusable="false">
@@ -53,19 +37,12 @@ function MicroscopeIcon() {
 
 export function Hero({ onOpenSubscribe }: { onOpenSubscribe: () => void }) {
   const [pouring, setPouring] = useState(false);
-  const [tilting, setTilting] = useState(false);
 
   useEffect(() => {
     if (!pouring) return;
     const t = window.setTimeout(() => setPouring(false), 8000);
     return () => window.clearTimeout(t);
   }, [pouring]);
-
-  useEffect(() => {
-    if (!tilting) return;
-    const t = window.setTimeout(() => setTilting(false), 1400);
-    return () => window.clearTimeout(t);
-  }, [tilting]);
 
   return (
     <header className="hero">
@@ -74,7 +51,6 @@ export function Hero({ onOpenSubscribe }: { onOpenSubscribe: () => void }) {
           className={[
             'heroCopy',
             pouring ? 'heroCopyPouring' : '',
-            tilting ? 'heroCopyTilting' : '',
           ]
             .filter(Boolean)
             .join(' ')}
@@ -90,15 +66,6 @@ export function Hero({ onOpenSubscribe }: { onOpenSubscribe: () => void }) {
                 title="Pour a little color"
               >
                 <FlaskIcon />
-              </button>
-              <button
-                type="button"
-                className={tilting ? 'flaskBtn flaskBtnActive' : 'flaskBtn'}
-                onClick={() => setTilting(true)}
-                aria-label="Tilt the page"
-                title="Tilt the page"
-              >
-                <RampIcon />
               </button>
             </div>
           </div>
