@@ -114,8 +114,7 @@ a{color: inherit; text-decoration-thickness: 1px; text-underline-offset: 3px}
   background: rgba(196, 244, 214, .78);
   transform: scaleY(0);
   transform-origin: bottom;
-  /* 3x slower */
-  transition: transform 3.45s cubic-bezier(.2,.9,.2,1);
+  transition: none;
   pointer-events: none;
   z-index: 0;
   /* uneven surface via animated clip-path */
@@ -128,12 +127,12 @@ a{color: inherit; text-decoration-thickness: 1px; text-underline-offset: 3px}
 }
 .heroCopy > *{position: relative; z-index: 1}
 .heroCopyPouring::after{
-  transform: scaleY(1);
-  animation: fillSurface 3.45s cubic-bezier(.2,.9,.2,1) 1 both;
+  animation: fillSurface 6s linear 1 both;
 }
 
 @keyframes fillSurface{
   0%{
+    transform: scaleY(0);
     clip-path: polygon(
       0% 100%,
       100% 100%,
@@ -141,32 +140,59 @@ a{color: inherit; text-decoration-thickness: 1px; text-underline-offset: 3px}
       0% 100%
     );
   }
-  55%{
+  75%{
+    transform: scaleY(1);
     clip-path: polygon(
-      0% 78%,
-      12% 76%,
-      24% 79%,
-      36% 75%,
-      48% 78%,
-      60% 74%,
-      72% 77%,
-      84% 73%,
-      100% 76%,
+      0% 22%,
+      10% 21%,
+      22% 23%,
+      34% 21.5%,
+      46% 22.5%,
+      58% 21%,
+      70% 22.2%,
+      82% 20.8%,
+      100% 21.8%,
+      100% 100%,
+      0% 100%
+    );
+  }
+  88%{
+    transform: scaleY(1);
+    clip-path: polygon(
+      0% 16%,
+      10% 15.5%,
+      22% 16.5%,
+      34% 15.6%,
+      46% 16.3%,
+      58% 15.4%,
+      70% 16.2%,
+      82% 15.3%,
+      100% 16.0%,
+      100% 100%,
+      0% 100%
+    );
+  }
+  92%{
+    transform: scaleY(1);
+    clip-path: polygon(
+      0% 16%,
+      10% 15.5%,
+      22% 16.5%,
+      34% 15.6%,
+      46% 16.3%,
+      58% 15.4%,
+      70% 16.2%,
+      82% 15.3%,
+      100% 16.0%,
       100% 100%,
       0% 100%
     );
   }
   100%{
+    transform: scaleY(0);
     clip-path: polygon(
-      0% 18%,
-      10% 16%,
-      22% 20%,
-      34% 15%,
-      46% 19%,
-      58% 14%,
-      70% 18%,
-      82% 13%,
-      100% 17%,
+      0% 100%,
+      100% 100%,
       100% 100%,
       0% 100%
     );
@@ -217,7 +243,7 @@ a{color: inherit; text-decoration-thickness: 1px; text-underline-offset: 3px}
   background-repeat: repeat-y;
   background-size: 6px 22px, 6px 28px, 6px 100%;
   background-position: 0 0, 0 0, 0 0;
-  animation: stream 3.45s ease-out 1;
+  animation: stream 6s ease-out 1;
   pointer-events: none;
 }
 .flaskBtnActive::after{
@@ -229,14 +255,15 @@ a{color: inherit; text-decoration-thickness: 1px; text-underline-offset: 3px}
   background: rgba(196, 244, 214, 1);
   top: 44px;
   right: 16px;
-  animation: drip 3.45s ease-out 1;
+  animation: drip 6s ease-out 1;
   pointer-events:none;
 }
 @keyframes stream{
   0%{height: 0; opacity: 0; background-position: 0 0, 0 0, 0 0}
   10%{height: 18px; opacity: 1; background-position: 0 0, 0 0, 0 0}
-  70%{height: 56px; opacity: .95; background-position: 0 -80px, 0 -120px, 0 0}
-  100%{height: 0; opacity: 0; background-position: 0 -120px, 0 -180px, 0 0}
+  78%{height: 56px; opacity: .95; background-position: 0 -120px, 0 -180px, 0 0}
+  92%{height: 22px; opacity: .65; background-position: 0 -160px, 0 -240px, 0 0}
+  100%{height: 0; opacity: 0; background-position: 0 -180px, 0 -270px, 0 0}
 }
 @keyframes drip{
   0%{transform: translateY(0) scale(.7); opacity: 0}
