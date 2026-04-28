@@ -246,15 +246,42 @@ a{color: inherit; text-decoration-thickness: 1px; text-underline-offset: 3px}
 .footerBrandRow{display:flex; align-items:center; gap: 10px}
 .footerTagline{margin: 0}
 .footerBrandBlockTilt{transform-origin: left bottom}
-.footerBrandBlockTilt .footerBrand,
-.footerBrandBlockTilt .footerTagline{
-  animation: footerSlideOff 4.2s cubic-bezier(.2,.9,.2,1) 1 both;
+.rollLine{display:inline-block}
+.rollLineActive{transform-origin: left bottom}
+.rollChar{
+  display:inline-block;
+  will-change: transform, opacity;
 }
 
-@keyframes footerSlideOff{
-  0%{transform: rotate(0deg) translate(0,0); opacity: 1}
-  18%{transform: rotate(10deg) translate(0,0); opacity: 1}
-  100%{transform: rotate(10deg) translate(160vw, 38vh); opacity: 0}
+.footerBrandBlockTilt .rollChar{
+  animation: rollOff 4.2s linear 1 both;
+  animation-delay: calc(var(--i, 0) * 18ms);
+}
+.footerBrandBlockTilt .footerTaglineText .rollChar{
+  animation-delay: calc(var(--i, 0) * 10ms);
+}
+
+/* simulate rolling + tiny “collisions” via jitter */
+@keyframes rollOff{
+  0%{
+    transform: rotate(0deg) translate(0,0);
+    opacity: 1;
+  }
+  18%{
+    transform: rotate(10deg) translate(0,0);
+    opacity: 1;
+  }
+  35%{
+    transform: rotate(14deg) translate(calc((var(--r, .5) - .5) * 4px), calc((var(--r, .5) - .5) * -4px));
+  }
+  65%{
+    transform: rotate(14deg) translate(calc(60vw + (var(--r, .5) - .5) * 18px), calc(12vh + (var(--r, .5) - .5) * -16px));
+    opacity: 1;
+  }
+  100%{
+    transform: rotate(14deg) translate(calc(160vw + (var(--r, .5) - .5) * 26px), calc(38vh + (var(--r, .5) - .5) * -22px));
+    opacity: 0;
+  }
 }
 
 .heroCopyPouring::before{
@@ -560,6 +587,13 @@ a{color: inherit; text-decoration-thickness: 1px; text-underline-offset: 3px}
   gap: 10px;
   margin-top: 8px;
 }
+.tagListRepel{
+  pointer-events: none;
+}
+.tagListRepel .tagChip{
+  transition: none;
+  animation: repelMove 3s linear 1 both;
+}
 .tagChip{
   display: inline-flex;
   align-items: center;
@@ -574,7 +608,7 @@ a{color: inherit; text-decoration-thickness: 1px; text-underline-offset: 3px}
   text-transform: lowercase;
   letter-spacing: .04em;
   font-weight: 600;
-  transition: transform .72s cubic-bezier(.2,.9,.2,1), box-shadow .14s ease, filter .14s ease;
+  transition: transform .32s ease, box-shadow .14s ease, filter .14s ease;
   will-change: transform;
 }
 .tagChip:hover{transform: translateY(-1px); box-shadow: var(--shadow-sm)}
@@ -584,6 +618,13 @@ a{color: inherit; text-decoration-thickness: 1px; text-underline-offset: 3px}
 .tagChip-biology{background: rgba(228, 210, 245, .65); border-color: rgba(122, 74, 156, .26)}
 .tagChip-psychology{background: rgba(255, 229, 237, .72); border-color: rgba(164, 70, 100, .24)}
 .tagChipTime{background: rgba(255,255,255,.75); border-color: rgba(21,21,21,.14)}
+
+@keyframes repelMove{
+  0%{transform: translate(0,0) rotate(0deg)}
+  45%{transform: translate(var(--dx, 0px), var(--dy, 0px)) rotate(var(--dr, 0deg))}
+  55%{transform: translate(var(--dx, 0px), var(--dy, 0px)) rotate(var(--dr, 0deg))}
+  100%{transform: translate(0,0) rotate(0deg)}
+}
 
 .iconBtn{
   appearance:none;
@@ -702,7 +743,7 @@ a{color: inherit; text-decoration-thickness: 1px; text-underline-offset: 3px}
     radial-gradient(circle at 30% 20%, rgba(196,244,214,.65), rgba(255,255,255,0) 55%),
     radial-gradient(circle at 70% 80%, rgba(205,220,255,.55), rgba(255,255,255,0) 60%),
     rgba(255,255,255,.95);
-  animation: lensZoom 4s ease-in-out 1 both;
+  animation: lensZoom 5s linear 1 both;
 }
 .microLabel{
   position:absolute;
@@ -724,7 +765,7 @@ a{color: inherit; text-decoration-thickness: 1px; text-underline-offset: 3px}
   line-height: 1.35;
   color: rgba(21,21,21,.85);
   text-wrap: pretty;
-  animation: microTextFade 4s ease-in-out 1 both;
+  animation: microTextFade 5s linear 1 both;
 }
 .microTextMuted{
   display:block;
@@ -739,7 +780,7 @@ a{color: inherit; text-decoration-thickness: 1px; text-underline-offset: 3px}
     inset 0 0 0 1px rgba(21,21,21,.10),
     0 10px 22px rgba(0,0,0,.10);
   opacity: 0;
-  animation: microOrgReveal 4s ease-in-out 1 both;
+  animation: microOrgReveal 5s linear 1 both;
 }
 .microOrgA{width: 18px; height: 12px; left: 32px; top: 78px; animation: swimA 1.4s ease-in-out infinite}
 .microOrgB{width: 12px; height: 12px; left: 118px; top: 54px; animation: swimB 1.1s ease-in-out infinite}
@@ -748,21 +789,22 @@ a{color: inherit; text-decoration-thickness: 1px; text-underline-offset: 3px}
 
 @keyframes lensPop{from{transform: scale(.92); opacity: 0} to{transform: scale(1); opacity: 1}}
 @keyframes lensZoom{
+  /* 0–60%: continuous zoom in (3s) */
   0%{transform: scale(1.0)}
-  15%{transform: scale(2.2)}
-  75%{transform: scale(2.2)}
-  100%{transform: scale(1.0)}
+  60%{transform: scale(3.6)}
+  /* 60–100%: stay extreme zoom (2s) */
+  100%{transform: scale(3.6)}
 }
 @keyframes microTextFade{
   0%{opacity: 1}
-  45%{opacity: 1}
-  55%{opacity: 0}
+  58%{opacity: 1}
+  64%{opacity: 0}
   100%{opacity: 0}
 }
 @keyframes microOrgReveal{
   0%{opacity: 0}
-  45%{opacity: 0}
-  60%{opacity: 1}
+  60%{opacity: 0}
+  72%{opacity: 1}
   100%{opacity: 1}
 }
 @keyframes swimA{0%,100%{transform: translate(0,0) rotate(0)} 50%{transform: translate(18px,-10px) rotate(6deg)}}

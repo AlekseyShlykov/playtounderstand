@@ -83,11 +83,8 @@ export function TagsSection() {
 
   const [order, setOrder] = useState<string[]>(() => chips.map((c) => c.id));
   const [repelling, setRepelling] = useState(false);
-  const [jitter, setJitter] = useState<Record<string, { x: number; y: number; r: number }>>(
-    {},
-  );
+  const [motion, setMotion] = useState<Record<string, { x: number; y: number; r: number }>>({});
 
-  const intervalRef = useRef<number | null>(null);
   const timeoutRef = useRef<number | null>(null);
 
   useEffect(() => {
@@ -102,7 +99,6 @@ export function TagsSection() {
 
   useEffect(() => {
     return () => {
-      if (intervalRef.current) window.clearInterval(intervalRef.current);
       if (timeoutRef.current) window.clearTimeout(timeoutRef.current);
     };
   }, []);
@@ -112,29 +108,20 @@ export function TagsSection() {
     setRepelling(true);
 
     const ids = chips.map((c) => c.id);
-    const tick = () => {
-      const next: Record<string, { x: number; y: number; r: number }> = {};
-      for (const id of ids) {
-        // Scatter, but keep it subtle enough to read.
-        const x = (Math.random() - 0.5) * 140;
-        const y = (Math.random() - 0.5) * 80;
-        const r = (Math.random() - 0.5) * 6;
-        next[id] = { x, y, r };
-      }
-      setJitter(next);
-    };
-
-    tick();
-    // Slower updates + longer CSS transitions = smoother motion.
-    intervalRef.current = window.setInterval(tick, 650);
+    const next: Record<string, { x: number; y: number; r: number }> = {};
+    for (const id of ids) {
+      // Scatter, but keep it subtle enough to read.
+      const x = (Math.random() - 0.5) * 220;
+      const y = (Math.random() - 0.5) * 110;
+      const r = (Math.random() - 0.5) * 8;
+      next[id] = { x, y, r };
+    }
+    setMotion(next);
 
     timeoutRef.current = window.setTimeout(() => {
-      if (intervalRef.current) window.clearInterval(intervalRef.current);
-      intervalRef.current = null;
-
       // Return to normal positions, but shuffled order.
       setOrder((prev) => shuffle(prev));
-      setJitter({});
+      setMotion({});
       setRepelling(false);
     }, 3000);
   }
@@ -174,11 +161,13 @@ export function TagsSection() {
           {order.map((id) => {
             const chip = chipsById(id);
             if (!chip) return null;
-            const j = jitter[id];
-            const style = j
+            const m = motion[id];
+            const style = m
               ? ({
-                  transform: `translate(${j.x}px, ${j.y}px) rotate(${j.r}deg)`,
-                } as const)
+                  ['--dx' as any]: `${m.x}px`,
+                  ['--dy' as any]: `${m.y}px`,
+                  ['--dr' as any]: `${m.r}deg`,
+                } as React.CSSProperties)
               : undefined;
             return (
               <a key={chip.id} className={chip.className} href={chip.href} style={style}>

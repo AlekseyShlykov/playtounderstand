@@ -18,7 +18,7 @@ export function SubscribeSection() {
 
   useEffect(() => {
     if (!zooming) return;
-    const t = window.setTimeout(() => setZooming(false), 4000);
+    const t = window.setTimeout(() => setZooming(false), 5000);
     return () => window.clearTimeout(t);
   }, [zooming]);
 

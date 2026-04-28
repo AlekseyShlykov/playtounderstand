@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { ExternalLink } from './ui/ExternalLink';
 
 function RampIcon() {
@@ -17,6 +17,43 @@ function RampIcon() {
   );
 }
 
+function RollingText({
+  text,
+  active,
+  className,
+}: {
+  text: string;
+  active: boolean;
+  className: string;
+}) {
+  const parts = useMemo(() => {
+    // Stable per mount, but “random enough”.
+    return [...text].map((ch, idx) => {
+      const r = (Math.sin(idx * 999) + 1) / 2; // 0..1 deterministic
+      return { ch, idx, r };
+    });
+  }, [text]);
+
+  return (
+    <span className={active ? `${className} rollLine rollLineActive` : `${className} rollLine`} aria-label={text}>
+      {parts.map((p) => (
+        <span
+          key={`${p.idx}-${p.ch}`}
+          className="rollChar"
+          style={
+            {
+              ['--i' as any]: p.idx,
+              ['--r' as any]: p.r,
+            } as React.CSSProperties
+          }
+        >
+          {p.ch === ' ' ? '\u00A0' : p.ch}
+        </span>
+      ))}
+    </span>
+  );
+}
+
 export function Footer() {
   const [tilting, setTilting] = useState(false);
 
@@ -31,7 +68,9 @@ export function Footer() {
       <div className="containerNarrow footerInner">
         <div className={tilting ? 'footerBrandBlock footerBrandBlockTilt' : 'footerBrandBlock'}>
           <div className="footerBrandRow">
-            <p className="footerBrand">Play to Understand</p>
+            <p className="footerBrand">
+              <RollingText text="Play to Understand" active={tilting} className="footerBrandText" />
+            </p>
             <button
               type="button"
               className={tilting ? 'iconBtn iconBtnActive' : 'iconBtn'}
@@ -42,7 +81,13 @@ export function Footer() {
               <RampIcon />
             </button>
           </div>
-          <p className="small muted footerTagline">Small games. Big ideas. Slightly stubborn.</p>
+          <p className="small muted footerTagline">
+            <RollingText
+              text="Small games. Big ideas. Slightly stubborn."
+              active={tilting}
+              className="footerTaglineText"
+            />
+          </p>
         </div>
         <nav className="footerLinks" aria-label="Elsewhere">
           <ExternalLink
