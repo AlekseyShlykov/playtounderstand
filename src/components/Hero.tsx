@@ -46,7 +46,7 @@ export function Hero({ onOpenSubscribe }: { onOpenSubscribe: () => void }) {
             </button>
             <ButtonLink
               href="https://patreon.com/buildtounderstand"
-              variant="tertiary"
+              variant="secondary"
               external
             >
               Support on Patreon ↗
