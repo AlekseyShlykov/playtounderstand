@@ -114,12 +114,64 @@ a{color: inherit; text-decoration-thickness: 1px; text-underline-offset: 3px}
   background: rgba(196, 244, 214, .78);
   transform: scaleY(0);
   transform-origin: bottom;
-  transition: transform 1.15s cubic-bezier(.2,.9,.2,1);
+  /* 3x slower */
+  transition: transform 3.45s cubic-bezier(.2,.9,.2,1);
   pointer-events: none;
   z-index: 0;
+  /* uneven surface via animated clip-path */
+  clip-path: polygon(
+    0% 100%,
+    100% 100%,
+    100% 100%,
+    0% 100%
+  );
 }
 .heroCopy > *{position: relative; z-index: 1}
-.heroCopyPouring::after{transform: scaleY(1)}
+.heroCopyPouring::after{
+  transform: scaleY(1);
+  animation: fillSurface 3.45s cubic-bezier(.2,.9,.2,1) 1 both;
+}
+
+@keyframes fillSurface{
+  0%{
+    clip-path: polygon(
+      0% 100%,
+      100% 100%,
+      100% 100%,
+      0% 100%
+    );
+  }
+  55%{
+    clip-path: polygon(
+      0% 78%,
+      12% 76%,
+      24% 79%,
+      36% 75%,
+      48% 78%,
+      60% 74%,
+      72% 77%,
+      84% 73%,
+      100% 76%,
+      100% 100%,
+      0% 100%
+    );
+  }
+  100%{
+    clip-path: polygon(
+      0% 18%,
+      10% 16%,
+      22% 20%,
+      34% 15%,
+      46% 19%,
+      58% 14%,
+      70% 18%,
+      82% 13%,
+      100% 17%,
+      100% 100%,
+      0% 100%
+    );
+  }
+}
 
 .brandRow{
   display:flex;
@@ -142,6 +194,32 @@ a{color: inherit; text-decoration-thickness: 1px; text-underline-offset: 3px}
 }
 .flaskBtn:hover{transform: translateY(-1px); background: rgba(255,255,255,.82); box-shadow: var(--shadow-sm)}
 .flaskBtnActive{transform: rotate(-10deg)}
+.flaskBtnActive::before{
+  /* stream */
+  content: "";
+  position: absolute;
+  top: 40px;
+  right: 20px;
+  width: 6px;
+  height: 0px;
+  border-radius: 999px;
+  background:
+    /* bubbles (two lanes) */
+    radial-gradient(circle at 2px 80%, rgba(255,255,255,.95) 0 1px, rgba(255,255,255,0) 2px),
+    radial-gradient(circle at 4px 55%, rgba(255,255,255,.85) 0 1px, rgba(255,255,255,0) 2px),
+    /* stream */
+    linear-gradient(
+      to bottom,
+      rgba(196, 244, 214, .0),
+      rgba(196, 244, 214, .95) 35%,
+      rgba(196, 244, 214, .75)
+    );
+  background-repeat: repeat-y;
+  background-size: 6px 22px, 6px 28px, 6px 100%;
+  background-position: 0 0, 0 0, 0 0;
+  animation: stream 3.45s ease-out 1;
+  pointer-events: none;
+}
 .flaskBtnActive::after{
   content: "";
   position: absolute;
@@ -151,14 +229,20 @@ a{color: inherit; text-decoration-thickness: 1px; text-underline-offset: 3px}
   background: rgba(196, 244, 214, 1);
   top: 44px;
   right: 16px;
-  animation: drip 1.15s ease-out 1;
+  animation: drip 3.45s ease-out 1;
   pointer-events:none;
+}
+@keyframes stream{
+  0%{height: 0; opacity: 0; background-position: 0 0, 0 0, 0 0}
+  10%{height: 18px; opacity: 1; background-position: 0 0, 0 0, 0 0}
+  70%{height: 56px; opacity: .95; background-position: 0 -80px, 0 -120px, 0 0}
+  100%{height: 0; opacity: 0; background-position: 0 -120px, 0 -180px, 0 0}
 }
 @keyframes drip{
   0%{transform: translateY(0) scale(.7); opacity: 0}
   10%{opacity: 1}
-  75%{transform: translateY(26px) scale(1); opacity: .9}
-  100%{transform: translateY(34px) scale(.9); opacity: 0}
+  75%{transform: translateY(34px) scale(1); opacity: .9}
+  100%{transform: translateY(44px) scale(.9); opacity: 0}
 }
 .heroTopRow{
   display: flex;
