@@ -81,7 +81,7 @@ export function ProjectsPage() {
                 key={t}
                 type="button"
                 className={activeTag === t ? 'filterPill filterPillActive' : 'filterPill'}
-                onClick={() => setActiveTag(t)}
+                onClick={() => setActiveTag((prev) => (prev === t ? null : t))}
               >
                 {t}
               </button>
@@ -93,7 +93,7 @@ export function ProjectsPage() {
                 className={
                   activeDuration === d ? 'filterPill filterPillActive' : 'filterPill'
                 }
-                onClick={() => setActiveDuration(d)}
+                onClick={() => setActiveDuration((prev) => (prev === d ? null : d))}
               >
                 {d}
               </button>
