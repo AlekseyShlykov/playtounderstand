@@ -7,7 +7,7 @@ export function SubscribeSection() {
       id="subscribe"
       aria-labelledby="subscribe-title"
     >
-      <div className="container">
+      <div className="containerNarrow">
         <div className="subscribeCard">
           <div className="subscribeCopy">
             <p className="kicker">Stay in the loop</p>

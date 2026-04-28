@@ -16,7 +16,7 @@ const tags: { tag: CanonicalTag; label: string }[] = [
 export function TagsSection() {
   return (
     <section className="section" id="tags" aria-labelledby="tags-title">
-      <div className="container">
+      <div className="containerNarrow">
         <div className="sectionHeader">
           <h2 className="h2" id="tags-title">
             Tags

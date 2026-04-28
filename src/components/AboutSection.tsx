@@ -3,7 +3,7 @@ import { ExternalLink } from './ui/ExternalLink';
 export function AboutSection() {
   return (
     <section className="section" id="about" aria-labelledby="about-title">
-      <div className="container aboutContainer">
+      <div className="containerNarrow">
         <p className="kicker">About</p>
         <h2 className="h2" id="about-title">
           Hi, I’m Alex.

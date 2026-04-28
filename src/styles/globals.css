@@ -22,7 +22,7 @@
 
   /* layout */
   --max: 1080px;
-  --read: 760px;
+  --read: 920px;
   --pad: 24px;
 
   /* type */
@@ -40,7 +40,14 @@ html{
 body{
   margin: 0;
   color: var(--ink);
-  background: var(--bg);
+  background:
+    linear-gradient(180deg, rgba(251,250,246,.92), rgba(251,250,246,.92)),
+    var(--back-image),
+    var(--bg);
+  background-repeat: no-repeat;
+  background-position: center top;
+  background-size: cover;
+  background-attachment: fixed;
   font-family: var(--sans);
   font-size: 16px;
   line-height: 1.55;
@@ -94,43 +101,22 @@ a{color: inherit; text-decoration-thickness: 1px; text-underline-offset: 3px}
   flex-wrap: wrap;
 }
 .heroTopRow .kicker{margin: 0}
-.statusPill{
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 5px 12px;
-  border: 1px solid var(--border);
-  background: var(--paper);
-  border-radius: 999px;
-  font-family: var(--caps);
-  text-transform: uppercase;
-  letter-spacing: .12em;
-  font-size: 11px;
-  color: var(--muted);
-}
-.statusDot{
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: var(--warm);
-  box-shadow: 0 0 0 3px rgba(217,119,6,.18);
-  animation: pulse 2.4s ease-in-out infinite;
-}
-@keyframes pulse{
-  0%, 100%{transform: scale(1); opacity: 1}
-  50%{transform: scale(.85); opacity: .7}
-}
 .heroTitle{
   font-family: var(--caps);
   font-weight: 900;
   letter-spacing: .005em;
   text-transform: uppercase;
-  line-height: .9;
-  font-size: clamp(40px, 6.2vw, 72px);
+  line-height: 1;
+  font-size: clamp(34px, 4.6vw, 58px);
   margin: 0 0 14px;
   text-wrap: balance;
 }
-.heroTitle span{display: block}
+.heroSubtitle{
+  margin: -6px 0 14px;
+  font-family: var(--serif);
+  font-size: 18px;
+  color: var(--muted);
+}
 .heroLede{
   font-size: clamp(18px, 1.5vw, 20px);
   margin: 0 0 8px;
@@ -567,5 +553,4 @@ a{color: inherit; text-decoration-thickness: 1px; text-underline-offset: 3px}
     transition-duration: 0ms !important;
   }
   html{scroll-behavior: auto}
-  .statusDot{animation: none}
 }

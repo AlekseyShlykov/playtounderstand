@@ -21,7 +21,7 @@ export function RandomGamesSection() {
 
   return (
     <section className="section" aria-labelledby="random-games-title">
-      <div className="container">
+      <div className="containerNarrow">
         <div className="sectionHeader">
           <div>
             <p className="kicker">Three picks, served warm</p>

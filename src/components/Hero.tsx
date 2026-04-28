@@ -3,21 +3,10 @@ import { ButtonLink } from './ui/ButtonLink';
 export function Hero() {
   return (
     <header className="hero">
-      <div className="container">
+      <div className="containerNarrow">
         <div className="heroCopy">
-          <div className="heroTopRow">
-            <p className="kicker">A small hub for learning through play.</p>
-            <span className="statusPill" aria-label="Status">
-              <span className="statusDot" aria-hidden="true" />
-              now shipping #4
-            </span>
-          </div>
-
-          <h1 className="heroTitle" aria-label="Play to Understand">
-            <span>PLAY</span>
-            <span>TO</span>
-            <span>UNDERSTAND</span>
-          </h1>
+          <h1 className="heroTitle">Play to Understand</h1>
+          <p className="heroSubtitle">A small hub for learning through play.</p>
 
           <p className="lede heroLede">
             Small games about big ideas.{' '}
