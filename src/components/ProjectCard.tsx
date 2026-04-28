@@ -1,5 +1,4 @@
 import type { Project } from '../data/projects';
-import { ButtonLink } from './ui/ButtonLink';
 
 function svgToDataUrl(svg: string) {
   const encoded = encodeURIComponent(svg)
@@ -12,16 +11,10 @@ export function ProjectCard({ project }: { project: Project }) {
   const isComingSoon = project.status === 'coming-soon';
   const imgSrc = project.image || (project.imageSvg ? svgToDataUrl(project.imageSvg) : '');
 
-  return (
+  const inner = (
     <article className="card" aria-label={project.title}>
-      <div className="cardMedia">
-        <img
-          className="cardImg"
-          src={imgSrc}
-          alt={project.imageAlt}
-          loading="lazy"
-          decoding="async"
-        />
+      <div className="cardMedia" aria-hidden="true">
+        <img className="cardImg" src={imgSrc} alt="" loading="lazy" decoding="async" />
       </div>
 
       <div className="cardBody">
@@ -44,17 +37,27 @@ export function ProjectCard({ project }: { project: Project }) {
           ))}
         </ul>
 
-        <div className="cardActions">
-          {isComingSoon ? (
+        {isComingSoon ? (
+          <div className="cardActions">
             <span className="muted">Placeholder for now.</span>
-          ) : (
-            <ButtonLink href={project.url} variant="tertiary" external>
-              Play
-            </ButtonLink>
-          )}
-        </div>
+          </div>
+        ) : null}
       </div>
     </article>
+  );
+
+  if (isComingSoon) return inner;
+
+  return (
+    <a
+      className="cardLink"
+      href={project.url}
+      target="_blank"
+      rel="noreferrer"
+      aria-label={`Play ${project.title}`}
+    >
+      {inner}
+    </a>
   );
 }
 

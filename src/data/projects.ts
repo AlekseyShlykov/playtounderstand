@@ -44,7 +44,7 @@ export const projects: Project[] = [
     imageAlt: 'Preview image for The Choice',
     imageSvg: wash('The Choice cover'),
     tags: ['ethics', 'philosophy'],
-    duration: '10–20 min',
+    duration: '~20 min',
     status: 'live',
   },
   {
@@ -55,7 +55,7 @@ export const projects: Project[] = [
     imageAlt: 'Preview image for Evolution of Civilizations',
     imageSvg: wash('Evolution of Civilizations cover'),
     tags: ['history'],
-    duration: '10–20 min',
+    duration: '~20 min',
     status: 'live',
   },
   {
@@ -66,7 +66,7 @@ export const projects: Project[] = [
     imageAlt: 'Preview image for How the Brain Shapes Behavior',
     imageSvg: wash('How the Brain Shapes Behavior cover'),
     tags: ['biology', 'psychology'],
-    duration: '10–15 min',
+    duration: '~5 min',
     status: 'live',
   },
   {
