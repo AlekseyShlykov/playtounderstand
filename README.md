@@ -22,5 +22,5 @@ npm run preview
 This site is fully static.
 
 - If deploying under a repo path (e.g. `https://user.github.io/repo/`), the GitHub Action sets `BASE_PATH="/repo/"`.
-- If deploying under a custom domain at root, set `BASE_PATH="/"`.
+- If deploying under a custom domain at root (e.g. `playtounderstand.com`), commit `public/CNAME` and the Action will set `BASE_PATH="/"`.
 
