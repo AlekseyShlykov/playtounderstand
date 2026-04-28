@@ -28,7 +28,7 @@ export function Hero({ onOpenSubscribe }: { onOpenSubscribe: () => void }) {
 
   useEffect(() => {
     if (!pouring) return;
-    const t = window.setTimeout(() => setPouring(false), 6000);
+    const t = window.setTimeout(() => setPouring(false), 2400);
     return () => window.clearTimeout(t);
   }, [pouring]);
 
