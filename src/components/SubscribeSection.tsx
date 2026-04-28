@@ -10,7 +10,6 @@ export function SubscribeSection() {
       <div className="containerNarrow">
         <div className="subscribeCard">
           <div className="subscribeCopy">
-            <p className="kicker">Stay in the loop</p>
             <h2 className="h2" id="subscribe-title">
               Get the next game by email.
             </h2>

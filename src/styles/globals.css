@@ -104,6 +104,61 @@ a{color: inherit; text-decoration-thickness: 1px; text-underline-offset: 3px}
   border: 1px solid rgba(21,21,21,.08);
   background: rgba(255,255,255,.55);
   box-shadow: var(--shadow-sm);
+  position: relative;
+  overflow: hidden;
+}
+.heroCopy::after{
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(196, 244, 214, .78);
+  transform: scaleY(0);
+  transform-origin: bottom;
+  transition: transform 1.15s cubic-bezier(.2,.9,.2,1);
+  pointer-events: none;
+  z-index: 0;
+}
+.heroCopy > *{position: relative; z-index: 1}
+.heroCopyPouring::after{transform: scaleY(1)}
+
+.brandRow{
+  display:flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+}
+.flaskBtn{
+  appearance:none;
+  border: 1px solid rgba(21,21,21,.14);
+  background: rgba(255,255,255,.60);
+  width: 40px;
+  height: 40px;
+  border-radius: 999px;
+  cursor: pointer;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  transition: transform .14s ease, background .14s ease, box-shadow .14s ease;
+}
+.flaskBtn:hover{transform: translateY(-1px); background: rgba(255,255,255,.82); box-shadow: var(--shadow-sm)}
+.flaskBtnActive{transform: rotate(-10deg)}
+.flaskBtnActive::after{
+  content: "";
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  background: rgba(196, 244, 214, 1);
+  top: 44px;
+  right: 16px;
+  animation: drip 1.15s ease-out 1;
+  pointer-events:none;
+}
+@keyframes drip{
+  0%{transform: translateY(0) scale(.7); opacity: 0}
+  10%{opacity: 1}
+  75%{transform: translateY(26px) scale(1); opacity: .9}
+  100%{transform: translateY(34px) scale(.9); opacity: 0}
 }
 .heroTopRow{
   display: flex;
