@@ -630,9 +630,10 @@ a{color: inherit; text-decoration-thickness: 1px; text-underline-offset: 3px}
 .tagChipTime{background: rgba(255,255,255,.75); border-color: rgba(21,21,21,.14)}
 
 @keyframes repelMove{
+  /* Start at the previous (FLIP-inverted) spot, explode away, then LAND in the new layout (0,0). */
   0%{transform: translate(var(--fx, 0px), var(--fy, 0px)) rotate(0deg)}
-  50%{transform: translate(calc(var(--fx, 0px) + var(--dx, 0px)), calc(var(--fy, 0px) + var(--dy, 0px))) rotate(var(--dr, 0deg))}
-  100%{transform: translate(var(--fx, 0px), var(--fy, 0px)) rotate(0deg)}
+  55%{transform: translate(calc(var(--fx, 0px) + var(--dx, 0px)), calc(var(--fy, 0px) + var(--dy, 0px))) rotate(var(--dr, 0deg))}
+  100%{transform: translate(0px, 0px) rotate(0deg)}
 }
 
 .iconBtn{

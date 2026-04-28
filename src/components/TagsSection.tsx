@@ -88,7 +88,6 @@ export function TagsSection() {
   const [flipping, setFlipping] = useState(false);
 
   const timeoutRef = useRef<number | null>(null);
-  const flipTimeoutRef = useRef<number | null>(null);
   const refs = useRef<Record<string, HTMLAnchorElement | null>>({});
   const lastRects = useRef<Record<string, DOMRect>>({});
   const pendingFlip = useRef<null | { nextOrder: string[]; prevRects: Record<string, DOMRect> }>(
@@ -109,13 +108,12 @@ export function TagsSection() {
   useEffect(() => {
     return () => {
       if (timeoutRef.current) window.clearTimeout(timeoutRef.current);
-      if (flipTimeoutRef.current) window.clearTimeout(flipTimeoutRef.current);
     };
   }, []);
 
   function startMagnet() {
     if (repelling) return;
-    setRepelling(true);
+    if (timeoutRef.current) window.clearTimeout(timeoutRef.current);
 
     const ids = chips.map((c) => c.id);
     const navEl = navRef.current;
@@ -124,6 +122,13 @@ export function TagsSection() {
     // Explode away from the tag-cloud center.
     const cx = navRect ? navRect.left + navRect.width / 2 : window.innerWidth / 2;
     const cy = navRect ? navRect.top + navRect.height / 2 : window.innerHeight / 2;
+
+    // Measure FIRST positions (before we shuffle).
+    const prevRects: Record<string, DOMRect> = {};
+    for (const id of order) {
+      const el = refs.current[id];
+      if (el) prevRects[id] = el.getBoundingClientRect();
+    }
 
     const next: Record<string, { x: number; y: number; r: number }> = {};
     for (const id of ids) {
@@ -167,20 +172,10 @@ export function TagsSection() {
 
     setMotion(next);
 
-    // Phase 1: repel out & back (CSS). Phase 2: FLIP to shuffled order.
-    timeoutRef.current = window.setTimeout(() => {
-      const prevRects: Record<string, DOMRect> = {};
-      for (const id of order) {
-        const el = refs.current[id];
-        if (el) prevRects[id] = el.getBoundingClientRect();
-      }
-
-      const nextOrder = shuffle(order);
-      pendingFlip.current = { nextOrder, prevRects };
-      setOrder(nextOrder);
-      setMotion({});
-      setRepelling(false);
-    }, 1550);
+    // Shuffle immediately; we will FLIP-invert to visually keep them where they were.
+    const nextOrder = shuffle(order);
+    pendingFlip.current = { nextOrder, prevRects };
+    setOrder(nextOrder);
   }
 
   // Measure current rects for FLIP bookkeeping.
@@ -216,12 +211,15 @@ export function TagsSection() {
     setFlipping(true);
     setFlip(inv);
 
-    // Next frame: remove transforms so it animates into the new places.
+    // Next frame: start the explode+land animation while flipped to the old spots.
     requestAnimationFrame(() => {
-      requestAnimationFrame(() => {
+      setRepelling(true);
+      timeoutRef.current = window.setTimeout(() => {
+        setRepelling(false);
+        setMotion({});
         setFlip({});
-        flipTimeoutRef.current = window.setTimeout(() => setFlipping(false), 1500);
-      });
+        setFlipping(false);
+      }, 1500);
     });
   }, [order]);
 
