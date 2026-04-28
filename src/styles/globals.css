@@ -337,34 +337,6 @@ a{color: inherit; text-decoration-thickness: 1px; text-underline-offset: 3px}
 .heroFinePrint{margin: 14px 0 0; font-style: italic}
 .heroCtas{display: flex; gap: 10px; flex-wrap: wrap; margin-top: 4px}
 
-/* ─── RITUAL (formerly Start here) ─────────────────── */
-.ritual{
-  margin: 6px 0 12px;
-  padding: 6px 0 6px 18px;
-  border-left: 2px solid rgba(21,21,21,.40);
-  max-width: 540px;
-}
-.ritualKicker{margin: 0 0 8px}
-.ritualList{
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  display: grid;
-  gap: 6px;
-}
-.ritualList li{
-  display: grid;
-  grid-template-columns: 22px 1fr;
-  gap: 10px;
-  align-items: baseline;
-}
-.ritualNum{
-  font-family: var(--caps);
-  font-weight: 700;
-  font-size: 13px;
-  color: var(--muted);
-}
-
 /* ─── TYPE ─────────────────────────────────────────── */
 .kicker{
   font-family: var(--caps);

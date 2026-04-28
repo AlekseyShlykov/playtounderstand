@@ -76,24 +76,6 @@ export function Hero({ onOpenSubscribe }: { onOpenSubscribe: () => void }) {
             life is not a content calendar. Subscribe if you want a heads-up.
           </p>
 
-          <div className="ritual" aria-label="How it works">
-            <p className="kicker ritualKicker">Extremely complicated process</p>
-            <ol className="ritualList">
-              <li>
-                <span className="ritualNum" aria-hidden="true">1</span>
-                <span>Pick a game.</span>
-              </li>
-              <li>
-                <span className="ritualNum" aria-hidden="true">2</span>
-                <span>Play for 10–20 minutes.</span>
-              </li>
-              <li>
-                <span className="ritualNum" aria-hidden="true">3</span>
-                <span>Leave with a clearer idea (or, fine, a clearer question).</span>
-              </li>
-            </ol>
-          </div>
-
           <div className="heroCtas">
             <ButtonLink href="#games" variant="primary">
               See games →
