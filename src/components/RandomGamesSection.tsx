@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { projects } from '../data/projects';
 import { ProjectCard } from './ProjectCard';
 
@@ -11,18 +11,48 @@ function shuffled<T>(arr: readonly T[]) {
   return copy;
 }
 
+function pickTwo(live: typeof projects) {
+  return shuffled(live).slice(0, 2);
+}
+
+function tileImgSrc(p: (typeof projects)[number]) {
+  return p.image;
+}
+
 export function RandomGamesSection() {
-  const [seed, setSeed] = useState(0);
-  const picks = useMemo(() => {
-    const live = projects.filter((p) => p.status !== 'coming-soon');
-    return shuffled(live).slice(0, 2);
-    // Stable for the session, fresh on each page load.
-  }, [seed]);
+  const live = useMemo(
+    () => projects.filter((p) => p.status !== 'coming-soon'),
+    [],
+  );
+  const [picks, setPicks] = useState(() => pickTwo(live));
+  const [shuffling, setShuffling] = useState(false);
+  const [reel, setReel] = useState(() => shuffled(live).concat(shuffled(live)));
+  const timeoutRef = useRef<number | null>(null);
+
+  useEffect(() => {
+    return () => {
+      if (timeoutRef.current) window.clearTimeout(timeoutRef.current);
+    };
+  }, []);
 
   const gridClass =
     picks.length === 2
       ? 'projectGrid projectGridTwo'
       : 'projectGrid projectGridCompact';
+
+  function onShuffle() {
+    if (shuffling) return;
+    setShuffling(true);
+
+    // Build a fast-moving reel (duplicates allowed).
+    const nextReel = Array.from({ length: 10 }, () => live[Math.floor(Math.random() * live.length)]);
+    setReel(nextReel);
+
+    timeoutRef.current = window.setTimeout(() => {
+      setPicks(pickTwo(live));
+      setShuffling(false);
+    }, 1100);
+  }
 
   return (
     <section
@@ -46,17 +76,33 @@ export function RandomGamesSection() {
             <button
               type="button"
               className="linkButton"
-              onClick={() => setSeed((s) => s + 1)}
+              onClick={onShuffle}
+              disabled={shuffling}
             >
-              Refresh
+              Shuffle
             </button>
           </div>
         </div>
 
-        <div className={gridClass}>
-          {picks.map((p) => (
-            <ProjectCard key={`random-${p.title}`} project={p} />
-          ))}
+        <div className="shuffleStage">
+          {shuffling ? (
+            <div className="shuffleReel" aria-hidden="true">
+              {reel.map((p, idx) => (
+                <div key={`${p.title}-${idx}`} className="shuffleTile">
+                  <img className="shuffleTileImg" src={tileImgSrc(p)} alt="" />
+                  <div className="shuffleTileMeta">
+                    <div className="shuffleTileTitle">{p.title}</div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : null}
+
+          <div className={shuffling ? `${gridClass} shuffleDim` : gridClass}>
+            {picks.map((p) => (
+              <ProjectCard key={`random-${p.title}`} project={p} />
+            ))}
+          </div>
         </div>
       </div>
     </section>

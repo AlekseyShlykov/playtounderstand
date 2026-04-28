@@ -35,15 +35,28 @@ export function SubscribeSection() {
               <h2 className="h2" id="subscribe-title">
                 Get the next game by email.
               </h2>
-              <button
-                type="button"
-                className={zooming ? 'microBtn microBtnActive' : 'microBtn'}
-                onClick={() => setZooming(true)}
-                aria-label="Zoom in (100×)"
-                title="Zoom in (100×)"
-              >
-                <MicroscopeIcon />
-              </button>
+              <span className="microAnchor">
+                <button
+                  type="button"
+                  className={zooming ? 'microBtn microBtnActive' : 'microBtn'}
+                  onClick={() => setZooming(true)}
+                  aria-label="Zoom in (100×)"
+                  title="Zoom in (100×)"
+                >
+                  <MicroscopeIcon />
+                </button>
+                {zooming ? (
+                  <div className="microLens microLensOnButton" aria-hidden="true">
+                    <div className="microLensInner">
+                      <div className="microLabel">100×</div>
+                      <div className="microOrg microOrgA" />
+                      <div className="microOrg microOrgB" />
+                      <div className="microOrg microOrgC" />
+                      <div className="microOrg microOrgD" />
+                    </div>
+                  </div>
+                ) : null}
+              </span>
             </div>
             <p className="lede">
               About once a month. Sometimes less. Never more.
@@ -84,17 +97,7 @@ export function SubscribeSection() {
             </p>
           </div>
 
-          {zooming ? (
-            <div className="microLens" aria-hidden="true">
-              <div className="microLensInner">
-                <div className="microLabel">100×</div>
-                <div className="microOrg microOrgA" />
-                <div className="microOrg microOrgB" />
-                <div className="microOrg microOrgC" />
-                <div className="microOrg microOrgD" />
-              </div>
-            </div>
-          ) : null}
+          {/* lens is rendered near the microscope button */}
         </div>
       </div>
     </section>
