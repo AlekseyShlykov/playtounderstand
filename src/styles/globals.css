@@ -22,7 +22,7 @@
 
   /* layout */
   --max: 1080px;
-  --read: 920px;
+  --read: 860px;
   --pad: 24px;
 
   /* type */
@@ -49,8 +49,8 @@ body{
   background-size: cover;
   background-attachment: fixed;
   font-family: var(--sans);
-  font-size: 16px;
-  line-height: 1.55;
+  font-size: 17px;
+  line-height: 1.65;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
@@ -91,6 +91,11 @@ a{color: inherit; text-decoration-thickness: 1px; text-underline-offset: 3px}
 .heroCopy{
   max-width: var(--read);
   margin: 0 auto;
+  padding: 18px 18px 16px;
+  border-radius: var(--radius-lg);
+  border: 1px solid rgba(21,21,21,.08);
+  background: rgba(255,255,255,.55);
+  box-shadow: var(--shadow-sm);
 }
 .heroTopRow{
   display: flex;
@@ -103,18 +108,18 @@ a{color: inherit; text-decoration-thickness: 1px; text-underline-offset: 3px}
 .heroTopRow .kicker{margin: 0}
 .heroTitle{
   font-family: var(--caps);
-  font-weight: 900;
-  letter-spacing: .005em;
+  font-weight: 850;
+  letter-spacing: .01em;
   text-transform: uppercase;
-  line-height: 1;
-  font-size: clamp(34px, 4.6vw, 58px);
-  margin: 0 0 14px;
+  line-height: 1.02;
+  font-size: clamp(32px, 4.2vw, 56px);
+  margin: 0 0 10px;
   text-wrap: balance;
 }
 .heroSubtitle{
-  margin: -6px 0 14px;
-  font-family: var(--serif);
-  font-size: 18px;
+  margin: 0 0 12px;
+  font-family: var(--sans);
+  font-size: 16px;
   color: var(--muted);
 }
 .heroLede{
@@ -130,7 +135,7 @@ a{color: inherit; text-decoration-thickness: 1px; text-underline-offset: 3px}
 .ritual{
   margin: 6px 0 12px;
   padding: 6px 0 6px 18px;
-  border-left: 2px solid var(--ink);
+  border-left: 2px solid rgba(21,21,21,.40);
   max-width: 540px;
 }
 .ritualKicker{margin: 0 0 8px}
@@ -212,6 +217,13 @@ a{color: inherit; text-decoration-thickness: 1px; text-underline-offset: 3px}
   flex-wrap: wrap;
 }
 .sectionHeader .kicker{margin: 0 0 6px}
+.sectionHeaderActions{
+  display:flex;
+  align-items:baseline;
+  justify-content:flex-end;
+  gap: 12px;
+  flex-wrap: wrap;
+}
 .sectionSub{
   margin: 0;
   color: var(--muted);
@@ -492,9 +504,13 @@ a{color: inherit; text-decoration-thickness: 1px; text-underline-offset: 3px}
 }
 
 /* ─── ABOUT ────────────────────────────────────────── */
-.aboutContainer{max-width: var(--read); margin: 0 auto; padding: 0 var(--pad)}
 .aboutLede{margin-bottom: 14px}
-.aboutBody{margin: 0 0 12px}
+.aboutBody{
+  margin: 0 0 12px;
+  max-width: none;
+  color: var(--muted);
+}
+.aboutBody a{color: var(--ink); font-weight: 500}
 .aboutFineprint{margin: 18px 0 0; font-style: italic}
 
 /* ─── FOOTER ───────────────────────────────────────── */

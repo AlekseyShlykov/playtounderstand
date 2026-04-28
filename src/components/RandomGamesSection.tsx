@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { projects } from '../data/projects';
 import { ProjectCard } from './ProjectCard';
 
@@ -12,27 +12,36 @@ function shuffled<T>(arr: readonly T[]) {
 }
 
 export function RandomGamesSection() {
+  const [seed, setSeed] = useState(0);
   const picks = useMemo(() => {
     const live = projects.filter((p) => p.status !== 'coming-soon');
-    return shuffled(live).slice(0, 3);
+    return shuffled(live).slice(0, 2);
     // Stable for the session, fresh on each page load.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [seed]);
 
   return (
     <section className="section" aria-labelledby="random-games-title">
       <div className="containerNarrow">
         <div className="sectionHeader">
           <div>
-            <p className="kicker">Three picks, served warm</p>
+            <p className="kicker">Two picks, served warm</p>
             <h2 className="h2" id="random-games-title">
-              3 random games
+              2 random games
             </h2>
           </div>
-          <p className="sectionSub">
-            Refresh the page for a different trio. (The algorithm is{' '}
-            <code className="codeNote">Math.random()</code>. No personalisation.)
-          </p>
+          <div className="sectionHeaderActions">
+            <p className="sectionSub">
+              (The algorithm is <code className="codeNote">Math.random()</code>. No
+              personalisation.)
+            </p>
+            <button
+              type="button"
+              className="linkButton"
+              onClick={() => setSeed((s) => s + 1)}
+            >
+              Refresh
+            </button>
+          </div>
         </div>
 
         <div className="projectGrid projectGridCompact">

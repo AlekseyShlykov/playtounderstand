@@ -42,7 +42,7 @@ export function Hero() {
               See games →
             </ButtonLink>
             <ButtonLink href="#subscribe" variant="secondary">
-              Subscribe (monthly‑ish)
+              New game alerts
             </ButtonLink>
             <ButtonLink
               href="https://patreon.com/buildtounderstand"

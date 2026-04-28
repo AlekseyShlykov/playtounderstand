@@ -3,7 +3,7 @@ import { ExternalLink } from './ui/ExternalLink';
 export function Footer() {
   return (
     <footer className="footer">
-      <div className="container footerInner">
+      <div className="containerNarrow footerInner">
         <div>
           <p className="footerBrand">Play to Understand</p>
           <p className="small muted">Small games. Big ideas. Slightly stubborn.</p>
@@ -17,9 +17,9 @@ export function Footer() {
           </ExternalLink>
           <ExternalLink
             href="https://buildtounderstand.substack.com/"
-            ariaLabel="Substack newsletter"
+            ariaLabel="Blog (Substack)"
           >
-            Substack
+            Blog
           </ExternalLink>
           <a href="/#/projects">Games</a>
         </nav>

@@ -36,7 +36,7 @@ export function ProjectsPage() {
   return (
     <main className="main">
       <section className="section" aria-labelledby="projects-page-title">
-        <div className="container">
+        <div className="containerNarrow">
           <div className="sectionHeader">
             <h2 className="h2" id="projects-page-title">
               Games
