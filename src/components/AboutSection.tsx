@@ -1,0 +1,45 @@
+import { ExternalLink } from './ui/ExternalLink';
+
+export function AboutSection() {
+  return (
+    <section className="section" id="about" aria-labelledby="about-title">
+      <div className="container aboutContainer">
+        <p className="kicker">About</p>
+        <h2 className="h2" id="about-title">
+          Hi, I’m Alex.
+        </h2>
+        <p className="lede aboutLede">
+          I build small interactive projects that help people understand
+          complicated ideas through play.
+        </p>
+        <p className="sectionSub aboutBody">
+          Most of these start as notes from a book, lecture, or a question I
+          can’t stop thinking about. Then I turn them into something you can
+          click through, test, and feel — instead of just read about. It’s a
+          one‑person operation, which is mostly the point.
+        </p>
+        <p className="sectionSub aboutBody">
+          Elsewhere on the internet:{' '}
+          <ExternalLink
+            href="https://patreon.com/buildtounderstand"
+            ariaLabel="Patreon: Build to Understand"
+          >
+            Patreon
+          </ExternalLink>{' '}
+          (back new games),{' '}
+          <ExternalLink
+            href="https://buildtounderstand.substack.com/"
+            ariaLabel="Substack newsletter"
+          >
+            Substack
+          </ExternalLink>{' '}
+          (occasional notes).
+        </p>
+        <p className="small muted aboutFineprint">
+          No team. No CMS. No analytics. The site is small on purpose; the work
+          is the games.
+        </p>
+      </div>
+    </section>
+  );
+}
