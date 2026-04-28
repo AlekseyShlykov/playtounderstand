@@ -9,8 +9,7 @@ export function Hero() {
           <p className="heroSubtitle">A small hub for learning through play.</p>
 
           <p className="lede heroLede">
-            Small games about big ideas.{' '}
-            <span className="muted">(Yes, like the explorables hub. Smaller. Slower.)</span>
+            Small games about big ideas.
           </p>
           <p className="sectionSub heroBody">
             New games drop about once a month — not more, sometimes less, because

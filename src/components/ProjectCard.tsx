@@ -11,8 +11,8 @@ export function ProjectCard({ project }: { project: Project }) {
   const isComingSoon = project.status === 'coming-soon';
   const imgSrc = project.image || (project.imageSvg ? svgToDataUrl(project.imageSvg) : '');
 
-  const inner = (
-    <article className="card" aria-label={project.title}>
+  const content = (
+    <>
       <div className="cardMedia" aria-hidden="true">
         <img className="cardImg" src={imgSrc} alt="" loading="lazy" decoding="async" />
       </div>
@@ -43,20 +43,26 @@ export function ProjectCard({ project }: { project: Project }) {
           </div>
         ) : null}
       </div>
-    </article>
+    </>
   );
 
-  if (isComingSoon) return inner;
+  if (isComingSoon) {
+    return (
+      <article className="card" aria-label={project.title}>
+        {content}
+      </article>
+    );
+  }
 
   return (
     <a
-      className="cardLink"
+      className="card cardLink"
       href={project.url}
       target="_blank"
       rel="noreferrer"
-      aria-label={`Play ${project.title}`}
+      aria-label={`Open ${project.title}`}
     >
-      {inner}
+      {content}
     </a>
   );
 }
