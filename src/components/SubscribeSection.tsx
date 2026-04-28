@@ -18,7 +18,7 @@ export function SubscribeSection() {
 
   useEffect(() => {
     if (!zooming) return;
-    const t = window.setTimeout(() => setZooming(false), 2000);
+    const t = window.setTimeout(() => setZooming(false), 4000);
     return () => window.clearTimeout(t);
   }, [zooming]);
 
@@ -49,6 +49,10 @@ export function SubscribeSection() {
                   <div className="microLens microLensOnButton" aria-hidden="true">
                     <div className="microLensInner">
                       <div className="microLabel">100×</div>
+                      <div className="microText">
+                        Get the next game by email.
+                        <span className="microTextMuted">About once a month.</span>
+                      </div>
                       <div className="microOrg microOrgA" />
                       <div className="microOrg microOrgB" />
                       <div className="microOrg microOrgC" />
