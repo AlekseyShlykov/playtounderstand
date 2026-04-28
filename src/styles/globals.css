@@ -598,7 +598,7 @@ a{color: inherit; text-decoration-thickness: 1px; text-underline-offset: 3px}
 }
 .tagListRepel .tagChip{
   transition: none;
-  animation: repelMove 3s linear 1 both;
+  animation: repelMove 1.5s linear 1 both;
 }
 .tagListFlip .tagChip{
   transition: transform 1.5s linear;
@@ -631,8 +631,7 @@ a{color: inherit; text-decoration-thickness: 1px; text-underline-offset: 3px}
 
 @keyframes repelMove{
   0%{transform: translate(var(--fx, 0px), var(--fy, 0px)) rotate(0deg)}
-  40%{transform: translate(calc(var(--fx, 0px) + var(--dx, 0px)), calc(var(--fy, 0px) + var(--dy, 0px))) rotate(var(--dr, 0deg))}
-  60%{transform: translate(calc(var(--fx, 0px) + var(--dx, 0px)), calc(var(--fy, 0px) + var(--dy, 0px))) rotate(var(--dr, 0deg))}
+  50%{transform: translate(calc(var(--fx, 0px) + var(--dx, 0px)), calc(var(--fy, 0px) + var(--dy, 0px))) rotate(var(--dr, 0deg))}
   100%{transform: translate(var(--fx, 0px), var(--fy, 0px)) rotate(0deg)}
 }
 

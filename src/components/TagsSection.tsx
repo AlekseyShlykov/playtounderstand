@@ -140,7 +140,7 @@ export function TagsSection() {
       setOrder(nextOrder);
       setMotion({});
       setRepelling(false);
-    }, 1500);
+    }, 1550);
   }
 
   // Measure current rects for FLIP bookkeeping.
