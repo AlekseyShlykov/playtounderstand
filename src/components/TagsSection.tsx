@@ -1,5 +1,5 @@
 import { projects } from '../data/projects';
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 
 export type CanonicalTag =
   | 'ethics'
@@ -84,8 +84,16 @@ export function TagsSection() {
   const [order, setOrder] = useState<string[]>(() => chips.map((c) => c.id));
   const [repelling, setRepelling] = useState(false);
   const [motion, setMotion] = useState<Record<string, { x: number; y: number; r: number }>>({});
+  const [flip, setFlip] = useState<Record<string, { x: number; y: number }>>({});
+  const [flipping, setFlipping] = useState(false);
 
   const timeoutRef = useRef<number | null>(null);
+  const flipTimeoutRef = useRef<number | null>(null);
+  const refs = useRef<Record<string, HTMLAnchorElement | null>>({});
+  const lastRects = useRef<Record<string, DOMRect>>({});
+  const pendingFlip = useRef<null | { nextOrder: string[]; prevRects: Record<string, DOMRect> }>(
+    null,
+  );
 
   useEffect(() => {
     // Keep order in sync if new time tags appear.
@@ -100,6 +108,7 @@ export function TagsSection() {
   useEffect(() => {
     return () => {
       if (timeoutRef.current) window.clearTimeout(timeoutRef.current);
+      if (flipTimeoutRef.current) window.clearTimeout(flipTimeoutRef.current);
     };
   }, []);
 
@@ -118,13 +127,63 @@ export function TagsSection() {
     }
     setMotion(next);
 
+    // Phase 1: repel out & back (CSS). Phase 2: FLIP to shuffled order.
     timeoutRef.current = window.setTimeout(() => {
-      // Return to normal positions, but shuffled order.
-      setOrder((prev) => shuffle(prev));
+      const prevRects: Record<string, DOMRect> = {};
+      for (const id of order) {
+        const el = refs.current[id];
+        if (el) prevRects[id] = el.getBoundingClientRect();
+      }
+
+      const nextOrder = shuffle(order);
+      pendingFlip.current = { nextOrder, prevRects };
+      setOrder(nextOrder);
       setMotion({});
       setRepelling(false);
-    }, 3000);
+    }, 1500);
   }
+
+  // Measure current rects for FLIP bookkeeping.
+  useLayoutEffect(() => {
+    const rects: Record<string, DOMRect> = {};
+    for (const id of order) {
+      const el = refs.current[id];
+      if (el) rects[id] = el.getBoundingClientRect();
+    }
+    lastRects.current = rects;
+  }, [order]);
+
+  // After order changes (shuffled), animate from previous positions to new positions.
+  useLayoutEffect(() => {
+    const pending = pendingFlip.current;
+    if (!pending) return;
+    pendingFlip.current = null;
+
+    const nextRects: Record<string, DOMRect> = {};
+    for (const id of pending.nextOrder) {
+      const el = refs.current[id];
+      if (el) nextRects[id] = el.getBoundingClientRect();
+    }
+
+    const inv: Record<string, { x: number; y: number }> = {};
+    for (const id of pending.nextOrder) {
+      const prev = pending.prevRects[id];
+      const next = nextRects[id];
+      if (!prev || !next) continue;
+      inv[id] = { x: prev.left - next.left, y: prev.top - next.top };
+    }
+
+    setFlipping(true);
+    setFlip(inv);
+
+    // Next frame: remove transforms so it animates into the new places.
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        setFlip({});
+        flipTimeoutRef.current = window.setTimeout(() => setFlipping(false), 1500);
+      });
+    });
+  }, [order]);
 
   const chipsById = useMemo(() => {
     const map = new Map(chips.map((c) => [c.id, c] as const));
@@ -157,20 +216,40 @@ export function TagsSection() {
           </div>
         </div>
 
-        <nav className={repelling ? 'tagList tagListRepel' : 'tagList'} aria-label="Tags">
+        <nav
+          className={[
+            'tagList',
+            repelling ? 'tagListRepel' : '',
+            flipping ? 'tagListFlip' : '',
+          ]
+            .filter(Boolean)
+            .join(' ')}
+          aria-label="Tags"
+        >
           {order.map((id) => {
             const chip = chipsById(id);
             if (!chip) return null;
             const m = motion[id];
-            const style = m
+            const f = flip[id];
+            const style = m || f
               ? ({
                   ['--dx' as any]: `${m.x}px`,
                   ['--dy' as any]: `${m.y}px`,
                   ['--dr' as any]: `${m.r}deg`,
+                  ['--fx' as any]: `${f?.x ?? 0}px`,
+                  ['--fy' as any]: `${f?.y ?? 0}px`,
                 } as React.CSSProperties)
               : undefined;
             return (
-              <a key={chip.id} className={chip.className} href={chip.href} style={style}>
+              <a
+                key={chip.id}
+                ref={(el) => {
+                  refs.current[chip.id] = el;
+                }}
+                className={chip.className}
+                href={chip.href}
+                style={style}
+              >
                 {chip.label}
               </a>
             );

@@ -1,41 +1,55 @@
 import { useEffect, useMemo, useState } from 'react';
 import { ExternalLink } from './ui/ExternalLink';
 
-function RampIcon() {
+function WindIcon() {
   return (
     <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" focusable="false">
       <path
-        d="M4 18h16v2H4v-2Zm2.2-2 11-8.4a2 2 0 0 1 3.2 1.6V16H6.2Z"
+        d="M3 9h10.8a2.2 2.2 0 1 0-2.1-2.7h2a.2.2 0 1 1 .1 0c0 .9-.7 1.7-1.7 1.7H3V6.5h8.8A3.7 3.7 0 1 1 15 11H3V9Zm0 6h13.5a2.4 2.4 0 1 0-2.3-3h2a.4.4 0 1 1 .3.1c0 1.3-1.1 2.4-2.4 2.4H3v-1.5Z"
         fill="currentColor"
       />
-      <path
-        d="M7.4 16h12V9.2c0-.5-.6-.8-1-.5L7.4 16Z"
-        fill="currentColor"
-        opacity=".18"
-      />
+      <path d="M3 12h11.5" stroke="currentColor" strokeWidth="1.5" opacity=".22" />
     </svg>
   );
+}
+
+function mulberry32(seed: number) {
+  return function () {
+    let t = (seed += 0x6d2b79f5);
+    t = Math.imul(t ^ (t >>> 15), t | 1);
+    t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
 }
 
 function RollingText({
   text,
   active,
+  run,
   className,
 }: {
   text: string;
   active: boolean;
+  run: number;
   className: string;
 }) {
   const parts = useMemo(() => {
-    // Stable per mount, but “random enough”.
+    const rand = mulberry32(
+      (run + 1) * 1337 + text.length * 17,
+    );
     return [...text].map((ch, idx) => {
-      const r = (Math.sin(idx * 999) + 1) / 2; // 0..1 deterministic
-      return { ch, idx, r };
+      const r1 = rand();
+      const r2 = rand();
+      const r3 = rand();
+      return { ch, idx, r1, r2, r3 };
     });
-  }, [text]);
+  }, [run, text]);
 
   return (
-    <span className={active ? `${className} rollLine rollLineActive` : `${className} rollLine`} aria-label={text}>
+    <span
+      className={active ? `${className} rollLine rollLineActive` : `${className} rollLine`}
+      aria-label={text}
+    >
       {parts.map((p) => (
         <span
           key={`${p.idx}-${p.ch}`}
@@ -43,7 +57,9 @@ function RollingText({
           style={
             {
               ['--i' as any]: p.idx,
-              ['--r' as any]: p.r,
+              ['--r1' as any]: p.r1,
+              ['--r2' as any]: p.r2,
+              ['--r3' as any]: p.r3,
             } as React.CSSProperties
           }
         >
@@ -55,36 +71,46 @@ function RollingText({
 }
 
 export function Footer() {
-  const [tilting, setTilting] = useState(false);
+  const [blowing, setBlowing] = useState(false);
+  const [run, setRun] = useState(0);
 
   useEffect(() => {
-    if (!tilting) return;
-    const t = window.setTimeout(() => setTilting(false), 4200);
+    if (!blowing) return;
+    const t = window.setTimeout(() => setBlowing(false), 4200);
     return () => window.clearTimeout(t);
-  }, [tilting]);
+  }, [blowing]);
 
   return (
     <footer className="footer">
       <div className="containerNarrow footerInner">
-        <div className={tilting ? 'footerBrandBlock footerBrandBlockTilt' : 'footerBrandBlock'}>
+        <div className={blowing ? 'footerBrandBlock footerBrandBlockWind' : 'footerBrandBlock'}>
           <div className="footerBrandRow">
             <p className="footerBrand">
-              <RollingText text="Play to Understand" active={tilting} className="footerBrandText" />
+              <RollingText
+                text="Play to Understand"
+                active={blowing}
+                run={run}
+                className="footerBrandText"
+              />
             </p>
             <button
               type="button"
-              className={tilting ? 'iconBtn iconBtnActive' : 'iconBtn'}
-              onClick={() => setTilting(true)}
-              aria-label="Tilt"
-              title="Tilt"
+              className={blowing ? 'iconBtn iconBtnActive' : 'iconBtn'}
+              onClick={() => {
+                setRun((r) => r + 1);
+                setBlowing(true);
+              }}
+              aria-label="Wind"
+              title="Wind"
             >
-              <RampIcon />
+              <WindIcon />
             </button>
           </div>
           <p className="small muted footerTagline">
             <RollingText
               text="Small games. Big ideas. Slightly stubborn."
-              active={tilting}
+              active={blowing}
+              run={run + 11}
               className="footerTaglineText"
             />
           </p>

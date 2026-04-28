@@ -2,7 +2,6 @@ import { useMemo, useState } from 'react';
 import { projects } from '../data/projects';
 import { ProjectCard } from './ProjectCard';
 import type { CanonicalTag } from './TagsSection';
-import { ButtonLink } from './ui/ButtonLink';
 
 function parseFiltersFromHash(): { tag: CanonicalTag | null; duration: string | null } {
   const hash = window.location.hash || '';
@@ -54,9 +53,9 @@ export function ProjectsPage() {
       <section className="section" aria-labelledby="projects-page-title">
         <div className="containerNarrow">
           <div className="sectionHeader">
-            <h2 className="h2" id="projects-page-title">
-              All games
-            </h2>
+            <a className="h2 projectsHomeLink" id="projects-page-title" href="/#/">
+              Home
+            </a>
             <p className="sectionSub">
               Short. Playable. One sitting. New ones about once a month.
             </p>
@@ -100,11 +99,6 @@ export function ProjectsPage() {
               </button>
             ))}
 
-            <div className="filterRight">
-              <ButtonLink href="/#/" variant="tertiary">
-                Back home
-              </ButtonLink>
-            </div>
           </div>
 
           <div className="projectGrid">
