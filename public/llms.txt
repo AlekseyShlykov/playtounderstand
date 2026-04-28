@@ -1,0 +1,33 @@
+# Play to Understand
+
+> Quiet interactive educational games about complex ideas. Each game is short
+> (10–20 minutes) and turns concepts from philosophy, history, ethics,
+> psychology, and biology into something you can play, test, and feel.
+> New games drop about once a month — sometimes less, never more.
+
+The site is a one-person project by Alex Shlykov. It is intentionally small:
+no analytics, no CMS, no funnel.
+
+## Games
+
+- [The Choice](https://thechoice.quest/): An interactive journey through the foundations of moral philosophy. Tags: ethics, philosophy.
+- [The Evolution of Civilizations](https://evolutionofcivilizations.earth/): Trace the forces that shaped the rise and fall of civilizations. Tags: history.
+- [How the Brain Shapes Behavior](https://buildtounderstand.dev/thebrain/): Discover which brain systems drive your everyday decisions. Tags: biology, psychology.
+
+## Topics
+
+- ethics
+- philosophy
+- history
+- biology
+- psychology
+
+## Subscribe & support
+
+- Newsletter (Substack/Blog): https://buildtounderstand.substack.com/
+- Patreon: https://patreon.com/buildtounderstand
+
+## Optional
+
+- Site: https://playtounderstand.com/
+- About the maker: Alex Shlykov — independent designer/developer, builds small interactive educational games.

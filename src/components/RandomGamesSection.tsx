@@ -19,6 +19,11 @@ export function RandomGamesSection() {
     // Stable for the session, fresh on each page load.
   }, [seed]);
 
+  const gridClass =
+    picks.length === 2
+      ? 'projectGrid projectGridTwo'
+      : 'projectGrid projectGridCompact';
+
   return (
     <section className="section" aria-labelledby="random-games-title">
       <div className="containerNarrow">
@@ -44,7 +49,7 @@ export function RandomGamesSection() {
           </div>
         </div>
 
-        <div className="projectGrid projectGridCompact">
+        <div className={gridClass}>
           {picks.map((p) => (
             <ProjectCard key={`random-${p.title}`} project={p} />
           ))}

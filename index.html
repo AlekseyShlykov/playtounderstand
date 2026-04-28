@@ -68,6 +68,76 @@
       name="twitter:image:alt"
       content="Play to Understand — a quiet collection of small games about big ideas"
     />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=PT+Sans:ital,wght@0,400;0,700;1,400;1,700&display=swap"
+    />
+
+    <link rel="canonical" href="https://playtounderstand.com/" />
+    <link rel="manifest" href="%BASE_URL%site.webmanifest" />
+    <link rel="author" href="%BASE_URL%humans.txt" type="text/plain" />
+    <link
+      rel="alternate"
+      type="application/rss+xml"
+      title="Play to Understand — Blog"
+      href="https://buildtounderstand.substack.com/feed"
+    />
+    <link rel="me" href="https://patreon.com/buildtounderstand" />
+
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@graph": [
+          {
+            "@type": "WebSite",
+            "@id": "https://playtounderstand.com/#website",
+            "url": "https://playtounderstand.com/",
+            "name": "Play to Understand",
+            "description": "Quiet interactive educational games about complex ideas.",
+            "inLanguage": "en",
+            "publisher": { "@id": "https://playtounderstand.com/#person" }
+          },
+          {
+            "@type": "Person",
+            "@id": "https://playtounderstand.com/#person",
+            "name": "Alex Shlykov",
+            "url": "https://playtounderstand.com/",
+            "sameAs": [
+              "https://patreon.com/buildtounderstand",
+              "https://buildtounderstand.substack.com/"
+            ]
+          },
+          {
+            "@type": "ItemList",
+            "name": "Games",
+            "itemListElement": [
+              {
+                "@type": "ListItem",
+                "position": 1,
+                "url": "https://thechoice.quest/",
+                "name": "The Choice"
+              },
+              {
+                "@type": "ListItem",
+                "position": 2,
+                "url": "https://evolutionofcivilizations.earth/",
+                "name": "The Evolution of Civilizations"
+              },
+              {
+                "@type": "ListItem",
+                "position": 3,
+                "url": "https://buildtounderstand.dev/thebrain/",
+                "name": "How the Brain Shapes Behavior"
+              }
+            ]
+          }
+        ]
+      }
+    </script>
+
     <title>Play to Understand</title>
   </head>
   <body>

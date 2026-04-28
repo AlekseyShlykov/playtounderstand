@@ -26,9 +26,9 @@
   --pad: 24px;
 
   /* type */
-  --serif: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, ui-serif, serif;
-  --sans: -apple-system, BlinkMacSystemFont, "Inter", "Segoe UI", Roboto, Helvetica, Arial, ui-sans-serif, system-ui, "Apple Color Emoji", "Segoe UI Emoji";
-  --caps: -apple-system, BlinkMacSystemFont, "Inter", "Segoe UI", Roboto, Helvetica, Arial, ui-sans-serif, system-ui;
+  --sans: "PT Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, ui-sans-serif, system-ui, "Apple Color Emoji", "Segoe UI Emoji";
+  --serif: "PT Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, ui-sans-serif, system-ui;
+  --caps: "PT Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, ui-sans-serif, system-ui;
   --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
 }
 
@@ -40,10 +40,7 @@ html{
 body{
   margin: 0;
   color: var(--ink);
-  background:
-    linear-gradient(180deg, rgba(251,250,246,.92), rgba(251,250,246,.92)),
-    var(--back-image),
-    var(--bg);
+  background: var(--back-image), var(--bg);
   background-repeat: no-repeat;
   background-position: center top;
   background-size: cover;
@@ -55,6 +52,17 @@ body{
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
 }
+
+/* Light wash for readability, keep edges visible */
+body::before{
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background: rgba(251,250,246,.35);
+}
+
+#root{position: relative}
 
 img, svg, iframe{display: block; max-width: 100%}
 
@@ -238,6 +246,7 @@ a{color: inherit; text-decoration-thickness: 1px; text-underline-offset: 3px}
   gap: 18px;
 }
 .projectGridCompact .card{grid-column: span 4}
+.projectGridTwo .card{grid-column: span 6}
 
 .linkButton{
   appearance: none;

@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+
+# Be kind to AI crawlers — there’s a summary at /llms.txt
+# (See https://llmstxt.org)
+
+Sitemap: https://playtounderstand.com/sitemap.xml

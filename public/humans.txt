@@ -1,0 +1,12 @@
+/* TEAM */
+  Designer & developer: Alex Shlykov
+  Site: https://playtounderstand.com
+  Patreon: https://patreon.com/buildtounderstand
+  Blog: https://buildtounderstand.substack.com/
+
+/* SITE */
+  Last update: 2026-04-28
+  Standards: HTML5, CSS3, ES2022
+  Components: React 19, Vite, TypeScript
+  Hosting: GitHub Pages
+  Doctype: HTML5
