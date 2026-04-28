@@ -100,7 +100,7 @@ export function Hero({ onOpenSubscribe }: { onOpenSubscribe: () => void }) {
           </div>
 
           <p className="small muted heroFinePrint">
-            No popups. No newsletter pop-up. No “you forgot something in your cart”.
+            Try clicking the buttons. There are a few hidden easter eggs around here.
           </p>
         </div>
       </div>
