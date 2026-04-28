@@ -31,8 +31,6 @@ export function Hero({ onOpenSubscribe }: { onOpenSubscribe: () => void }) {
             </ol>
           </div>
 
-          <p className="aside">Probably better than doomscrolling.</p>
-
           <div className="heroCtas">
             <ButtonLink href="#games" variant="primary">
               See games →
