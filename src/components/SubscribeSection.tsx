@@ -30,6 +30,7 @@ export function SubscribeSection() {
             </p>
             <ul className="promiseList">
               <li>One email per game. Sometimes none.</li>
+              <li>Also: my notes on the games (the parts I couldn’t fit in).</li>
               <li>No drip funnel. No “you forgot something”.</li>
               <li>Two clicks to unsubscribe. Always.</li>
             </ul>
@@ -47,7 +48,8 @@ export function SubscribeSection() {
               />
             </div>
             <p className="small muted subscribeFootnote">
-              Yes, the orange button is Substack’s. The games are mine.
+              Substack also has my notes on the games. Patreon has behind the
+              scenes + the longer version of whatever the game is about.
             </p>
           </div>
         </div>

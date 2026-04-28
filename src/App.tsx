@@ -4,6 +4,7 @@ import { Footer } from './components/Footer';
 import { Hero } from './components/Hero';
 import { ProjectsPage } from './components/ProjectsPage';
 import { RandomGamesSection } from './components/RandomGamesSection';
+import { SubscribeModal } from './components/SubscribeModal';
 import { SubscribeSection } from './components/SubscribeSection';
 import { TagsSection } from './components/TagsSection';
 
@@ -18,6 +19,7 @@ export function App() {
     if (typeof window === 'undefined') return 'home';
     return getRoute();
   });
+  const [subscribeOpen, setSubscribeOpen] = useState(false);
 
   useEffect(() => {
     const onHash = () => setRoute(getRoute());
@@ -44,7 +46,8 @@ export function App() {
       <a className="skipLink" href="#tags">
         Skip to tags
       </a>
-      <Hero />
+      <Hero onOpenSubscribe={() => setSubscribeOpen(true)} />
+      <SubscribeModal open={subscribeOpen} onClose={() => setSubscribeOpen(false)} />
       <main className="main">
         <RandomGamesSection />
         <TagsSection />

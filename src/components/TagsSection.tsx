@@ -1,3 +1,5 @@
+import { projects } from '../data/projects';
+
 export type CanonicalTag =
   | 'ethics'
   | 'philosophy'
@@ -13,18 +15,33 @@ const tags: { tag: CanonicalTag; label: string }[] = [
   { tag: 'psychology', label: 'psychology' },
 ];
 
+function uniqueDurations(): string[] {
+  const set = new Set<string>();
+  for (const p of projects) {
+    if (p.status === 'coming-soon') continue;
+    if (p.duration) set.add(p.duration);
+  }
+  return [...set].sort((a, b) => a.localeCompare(b));
+}
+
 export function TagsSection() {
+  const durations = uniqueDurations();
   return (
     <section className="section" id="tags" aria-labelledby="tags-title">
       <div className="containerNarrow">
         <div className="sectionHeader">
-          <h2 className="h2" id="tags-title">
-            Tags
-          </h2>
-          <p className="sectionSub">Pick one.</p>
+          <div>
+            <h2 className="h2" id="tags-title">
+              Tags
+            </h2>
+            <p className="sectionSub">Pick one.</p>
+          </div>
+          <a className="btn btnSecondary" href="/#/projects">
+            See all games →
+          </a>
         </div>
 
-        <nav className="tagList" aria-label="Tags">
+        <nav className="tagList" aria-label="Topic tags">
           {tags.map((t) => (
             <a
               key={t.tag}
@@ -32,6 +49,18 @@ export function TagsSection() {
               href={`/#/projects?tag=${t.tag}`}
             >
               {t.label}
+            </a>
+          ))}
+        </nav>
+
+        <nav className="tagList tagListSecondary" aria-label="Time tags">
+          {durations.map((d) => (
+            <a
+              key={d}
+              className="tagChip tagChipTime"
+              href={`/#/projects?duration=${encodeURIComponent(d)}`}
+            >
+              {d}
             </a>
           ))}
         </nav>

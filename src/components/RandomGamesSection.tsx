@@ -25,7 +25,11 @@ export function RandomGamesSection() {
       : 'projectGrid projectGridCompact';
 
   return (
-    <section className="section" aria-labelledby="random-games-title">
+    <section
+      className="section"
+      id="games"
+      aria-labelledby="random-games-title"
+    >
       <div className="containerNarrow">
         <div className="sectionHeader">
           <div>

@@ -4,34 +4,50 @@ import { ProjectCard } from './ProjectCard';
 import type { CanonicalTag } from './TagsSection';
 import { ButtonLink } from './ui/ButtonLink';
 
-function parseTagFromHash(): CanonicalTag | null {
+function parseFiltersFromHash(): { tag: CanonicalTag | null; duration: string | null } {
   const hash = window.location.hash || '';
   const idx = hash.indexOf('?');
-  if (idx === -1) return null;
+  if (idx === -1) return { tag: null, duration: null };
   const q = new URLSearchParams(hash.slice(idx + 1));
-  const raw = q.get('tag');
+  const rawTag = q.get('tag');
+  const duration = q.get('duration');
   if (
-    raw === 'ethics' ||
-    raw === 'philosophy' ||
-    raw === 'history' ||
-    raw === 'biology' ||
-    raw === 'psychology'
+    rawTag === 'ethics' ||
+    rawTag === 'philosophy' ||
+    rawTag === 'history' ||
+    rawTag === 'biology' ||
+    rawTag === 'psychology'
   ) {
-    return raw;
+    return { tag: rawTag, duration };
   }
-  return null;
+  return { tag: null, duration };
 }
 
 export function ProjectsPage() {
-  const [activeTag, setActiveTag] = useState<CanonicalTag | null>(() => {
+  const initial = (() => {
     if (typeof window === 'undefined') return null;
-    return parseTagFromHash();
-  });
+    return parseFiltersFromHash();
+  })();
+
+  const [activeTag, setActiveTag] = useState<CanonicalTag | null>(initial?.tag ?? null);
+  const [activeDuration, setActiveDuration] = useState<string | null>(initial?.duration ?? null);
+
+  const durations = useMemo(() => {
+    const set = new Set<string>();
+    for (const p of projects) {
+      if (p.status === 'coming-soon') continue;
+      if (p.duration) set.add(p.duration);
+    }
+    return [...set].sort((a, b) => a.localeCompare(b));
+  }, []);
 
   const filtered = useMemo(() => {
-    if (!activeTag) return projects;
-    return projects.filter((p) => p.tags.includes(activeTag));
-  }, [activeTag]);
+    return projects.filter((p) => {
+      if (activeTag && !p.tags.includes(activeTag)) return false;
+      if (activeDuration && p.duration !== activeDuration) return false;
+      return true;
+    });
+  }, [activeDuration, activeTag]);
 
   return (
     <main className="main">
@@ -39,18 +55,25 @@ export function ProjectsPage() {
         <div className="containerNarrow">
           <div className="sectionHeader">
             <h2 className="h2" id="projects-page-title">
-              Games
+              All games
             </h2>
             <p className="sectionSub">
               Short. Playable. One sitting. New ones about once a month.
             </p>
           </div>
 
-          <div className="filterRow" aria-label="Filter by tag">
+          <div className="filterRow" aria-label="Filters">
             <button
               type="button"
-              className={activeTag === null ? 'filterPill filterPillActive' : 'filterPill'}
-              onClick={() => setActiveTag(null)}
+              className={
+                activeTag === null && activeDuration === null
+                  ? 'filterPill filterPillActive'
+                  : 'filterPill'
+              }
+              onClick={() => {
+                setActiveTag(null);
+                setActiveDuration(null);
+              }}
             >
               all
             </button>
@@ -62,6 +85,18 @@ export function ProjectsPage() {
                 onClick={() => setActiveTag(t)}
               >
                 {t}
+              </button>
+            ))}
+            {durations.map((d) => (
+              <button
+                key={d}
+                type="button"
+                className={
+                  activeDuration === d ? 'filterPill filterPillActive' : 'filterPill'
+                }
+                onClick={() => setActiveDuration(d)}
+              >
+                {d}
               </button>
             ))}
 

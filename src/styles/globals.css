@@ -351,6 +351,7 @@ a{color: inherit; text-decoration-thickness: 1px; text-underline-offset: 3px}
   gap: 10px;
   margin-top: 8px;
 }
+.tagListSecondary{margin-top: 12px}
 .tagChip{
   display: inline-flex;
   align-items: center;
@@ -373,6 +374,7 @@ a{color: inherit; text-decoration-thickness: 1px; text-underline-offset: 3px}
 .tagChip-history{background: rgba(212, 245, 219, .65); border-color: rgba(65, 128, 77, .28)}
 .tagChip-biology{background: rgba(228, 210, 245, .65); border-color: rgba(122, 74, 156, .26)}
 .tagChip-psychology{background: rgba(255, 229, 237, .72); border-color: rgba(164, 70, 100, .24)}
+.tagChipTime{background: rgba(255,255,255,.75); border-color: rgba(21,21,21,.14)}
 
 /* ─── FILTERS (projects page) ──────────────────────── */
 .filterRow{
@@ -518,6 +520,58 @@ a{color: inherit; text-decoration-thickness: 1px; text-underline-offset: 3px}
   white-space: nowrap;
   border: 0;
 }
+
+/* ─── MODAL ────────────────────────────────────────── */
+.modalOverlay{
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  background: rgba(10,10,10,.38);
+  backdrop-filter: blur(6px);
+  display: grid;
+  place-items: center;
+  padding: 18px;
+}
+.modal{
+  width: min(560px, 100%);
+  border-radius: var(--radius-lg);
+  border: 1px solid rgba(255,255,255,.22);
+  background: rgba(255,255,255,.92);
+  box-shadow: 0 22px 70px rgba(0,0,0,.22);
+}
+.modalHeader{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap: 12px;
+  padding: 14px 16px 10px;
+  border-bottom: 1px solid rgba(21,21,21,.08);
+}
+.modalTitle{
+  margin: 0;
+  font-family: var(--caps);
+  text-transform: uppercase;
+  letter-spacing: .12em;
+  font-size: 12px;
+  color: var(--muted);
+}
+.modalClose{
+  appearance:none;
+  border: 1px solid rgba(21,21,21,.14);
+  background: rgba(255,255,255,.7);
+  width: 36px;
+  height: 36px;
+  border-radius: 999px;
+  cursor: pointer;
+  font-size: 20px;
+  line-height: 1;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+}
+.modalClose:hover{background: #fff}
+.modalBody{padding: 14px 16px 16px}
+.modalNote{margin: 10px 0 0; text-align: center}
 
 /* ─── ABOUT ────────────────────────────────────────── */
 .aboutLede{margin-bottom: 14px}

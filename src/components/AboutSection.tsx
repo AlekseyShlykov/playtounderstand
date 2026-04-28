@@ -35,10 +35,6 @@ export function AboutSection() {
           </ExternalLink>{' '}
           (occasional notes).
         </p>
-        <p className="small muted aboutFineprint">
-          No team. No CMS. No analytics. The site is small on purpose; the work
-          is the games.
-        </p>
       </div>
     </section>
   );

@@ -24,8 +24,7 @@ export function Footer() {
           <a href="/#/projects">Games</a>
         </nav>
         <p className="small muted footerCopy">
-          © {new Date().getFullYear()} — made slowly, on purpose. No growth
-          hacking was harmed in the making of this site.
+          © {new Date().getFullYear()} — made slowly, with too much tea!
         </p>
       </div>
     </footer>

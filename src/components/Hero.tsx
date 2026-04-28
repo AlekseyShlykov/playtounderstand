@@ -1,6 +1,6 @@
 import { ButtonLink } from './ui/ButtonLink';
 
-export function Hero() {
+export function Hero({ onOpenSubscribe }: { onOpenSubscribe: () => void }) {
   return (
     <header className="hero">
       <div className="containerNarrow">
@@ -37,12 +37,16 @@ export function Hero() {
           <p className="aside">Probably better than doomscrolling.</p>
 
           <div className="heroCtas">
-            <ButtonLink href="/#/projects" variant="primary">
+            <ButtonLink href="#games" variant="primary">
               See games →
             </ButtonLink>
-            <ButtonLink href="#subscribe" variant="secondary">
+            <button
+              type="button"
+              className="btn btnSecondary"
+              onClick={onOpenSubscribe}
+            >
               New game alerts
-            </ButtonLink>
+            </button>
             <ButtonLink
               href="https://patreon.com/buildtounderstand"
               variant="tertiary"
