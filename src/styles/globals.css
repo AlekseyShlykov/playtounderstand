@@ -482,7 +482,7 @@ a{color: inherit; text-decoration-thickness: 1px; text-underline-offset: 3px}
   gap: 10px;
   margin-top: 8px;
 }
-.tagListSecondary{margin-top: 12px}
+.tagListRepel .tagChip{transition-duration: 140ms}
 .tagChip{
   display: inline-flex;
   align-items: center;
@@ -497,7 +497,8 @@ a{color: inherit; text-decoration-thickness: 1px; text-underline-offset: 3px}
   text-transform: lowercase;
   letter-spacing: .04em;
   font-weight: 600;
-  transition: transform .14s ease, box-shadow .14s ease, filter .14s ease;
+  transition: transform .32s ease, box-shadow .14s ease, filter .14s ease;
+  will-change: transform;
 }
 .tagChip:hover{transform: translateY(-1px); box-shadow: var(--shadow-sm)}
 .tagChip-ethics{background: rgba(255, 214, 165, .55); border-color: rgba(167, 110, 52, .26)}
@@ -506,6 +507,23 @@ a{color: inherit; text-decoration-thickness: 1px; text-underline-offset: 3px}
 .tagChip-biology{background: rgba(228, 210, 245, .65); border-color: rgba(122, 74, 156, .26)}
 .tagChip-psychology{background: rgba(255, 229, 237, .72); border-color: rgba(164, 70, 100, .24)}
 .tagChipTime{background: rgba(255,255,255,.75); border-color: rgba(21,21,21,.14)}
+
+.iconBtn{
+  appearance:none;
+  border: 1px solid rgba(21,21,21,.14);
+  background: rgba(255,255,255,.70);
+  width: 40px;
+  height: 40px;
+  border-radius: 999px;
+  cursor: pointer;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  transition: transform .14s ease, background .14s ease, box-shadow .14s ease;
+  flex: 0 0 auto;
+}
+.iconBtn:hover{transform: translateY(-1px); background: #fff; box-shadow: var(--shadow-sm)}
+.iconBtnActive{transform: rotate(-10deg)}
 
 /* ─── FILTERS (projects page) ──────────────────────── */
 .filterRow{

@@ -1,4 +1,5 @@
 import { projects } from '../data/projects';
+import { useEffect, useMemo, useRef, useState } from 'react';
 
 export type CanonicalTag =
   | 'ethics'
@@ -24,8 +25,124 @@ function uniqueDurations(): string[] {
   return [...set].sort((a, b) => a.localeCompare(b));
 }
 
+function MagnetIcon() {
+  return (
+    <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" focusable="false">
+      <path
+        d="M7 2h4v7a1 1 0 0 1-2 0V4H7V2Zm6 0h4v2h-2v5a1 1 0 0 1-2 0V2Z"
+        fill="currentColor"
+      />
+      <path
+        d="M7 10v3a5 5 0 0 0 10 0v-3h2v3a7 7 0 0 1-14 0v-3h2Z"
+        fill="currentColor"
+      />
+      <path
+        d="M6.5 10h5v2h-5v-2Zm6 0h5v2h-5v-2Z"
+        fill="currentColor"
+        opacity=".18"
+      />
+    </svg>
+  );
+}
+
+type Chip = {
+  id: string;
+  label: string;
+  href: string;
+  className: string;
+};
+
+function shuffle<T>(arr: readonly T[]) {
+  const copy = [...arr];
+  for (let i = copy.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [copy[i], copy[j]] = [copy[j], copy[i]];
+  }
+  return copy;
+}
+
 export function TagsSection() {
   const durations = uniqueDurations();
+  const chips: Chip[] = useMemo(() => {
+    const topicChips: Chip[] = tags.map((t) => ({
+      id: `topic:${t.tag}`,
+      label: t.label,
+      href: `/#/projects?tag=${t.tag}`,
+      className: `tagChip tagChip-${t.tag}`,
+    }));
+
+    const timeChips: Chip[] = durations.map((d) => ({
+      id: `time:${d}`,
+      label: d,
+      href: `/#/projects?duration=${encodeURIComponent(d)}`,
+      className: `tagChip tagChipTime`,
+    }));
+
+    return [...topicChips, ...timeChips];
+  }, [durations]);
+
+  const [order, setOrder] = useState<string[]>(() => chips.map((c) => c.id));
+  const [repelling, setRepelling] = useState(false);
+  const [jitter, setJitter] = useState<Record<string, { x: number; y: number; r: number }>>(
+    {},
+  );
+
+  const intervalRef = useRef<number | null>(null);
+  const timeoutRef = useRef<number | null>(null);
+
+  useEffect(() => {
+    // Keep order in sync if new time tags appear.
+    setOrder((prev) => {
+      const ids = chips.map((c) => c.id);
+      const prevSet = new Set(prev);
+      const next = [...prev.filter((id) => ids.includes(id)), ...ids.filter((id) => !prevSet.has(id))];
+      return next;
+    });
+  }, [chips]);
+
+  useEffect(() => {
+    return () => {
+      if (intervalRef.current) window.clearInterval(intervalRef.current);
+      if (timeoutRef.current) window.clearTimeout(timeoutRef.current);
+    };
+  }, []);
+
+  function startMagnet() {
+    if (repelling) return;
+    setRepelling(true);
+
+    const ids = chips.map((c) => c.id);
+    const tick = () => {
+      const next: Record<string, { x: number; y: number; r: number }> = {};
+      for (const id of ids) {
+        // Scatter, but keep it subtle enough to read.
+        const x = (Math.random() - 0.5) * 120;
+        const y = (Math.random() - 0.5) * 70;
+        const r = (Math.random() - 0.5) * 10;
+        next[id] = { x, y, r };
+      }
+      setJitter(next);
+    };
+
+    tick();
+    intervalRef.current = window.setInterval(tick, 250);
+
+    timeoutRef.current = window.setTimeout(() => {
+      if (intervalRef.current) window.clearInterval(intervalRef.current);
+      intervalRef.current = null;
+
+      // Return to normal positions, but shuffled order.
+      setOrder((prev) => shuffle(prev));
+      setJitter({});
+      setRepelling(false);
+    }, 3000);
+  }
+
+  const chipsById = useMemo(() => {
+    const map = new Map(chips.map((c) => [c.id, c] as const));
+    return (id: string) => map.get(id);
+  }, [chips]);
+
   return (
     <section className="section" id="tags" aria-labelledby="tags-title">
       <div className="containerNarrow">
@@ -36,33 +153,38 @@ export function TagsSection() {
             </h2>
             <p className="sectionSub">Pick one.</p>
           </div>
-          <a className="btn btnSecondary" href="/#/projects">
-            See all games →
-          </a>
+          <div className="sectionHeaderActions">
+            <button
+              type="button"
+              className={repelling ? 'iconBtn iconBtnActive' : 'iconBtn'}
+              onClick={startMagnet}
+              aria-label="Repel tags"
+              title="Repel tags"
+            >
+              <MagnetIcon />
+            </button>
+            <a className="btn btnSecondary" href="/#/projects">
+              See all games →
+            </a>
+          </div>
         </div>
 
-        <nav className="tagList" aria-label="Topic tags">
-          {tags.map((t) => (
-            <a
-              key={t.tag}
-              className={`tagChip tagChip-${t.tag}`}
-              href={`/#/projects?tag=${t.tag}`}
-            >
-              {t.label}
-            </a>
-          ))}
-        </nav>
-
-        <nav className="tagList tagListSecondary" aria-label="Time tags">
-          {durations.map((d) => (
-            <a
-              key={d}
-              className="tagChip tagChipTime"
-              href={`/#/projects?duration=${encodeURIComponent(d)}`}
-            >
-              {d}
-            </a>
-          ))}
+        <nav className={repelling ? 'tagList tagListRepel' : 'tagList'} aria-label="Tags">
+          {order.map((id) => {
+            const chip = chipsById(id);
+            if (!chip) return null;
+            const j = jitter[id];
+            const style = j
+              ? ({
+                  transform: `translate(${j.x}px, ${j.y}px) rotate(${j.r}deg)`,
+                } as const)
+              : undefined;
+            return (
+              <a key={chip.id} className={chip.className} href={chip.href} style={style}>
+                {chip.label}
+              </a>
+            );
+          })}
         </nav>
       </div>
     </section>
