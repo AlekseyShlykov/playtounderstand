@@ -233,9 +233,9 @@ export function TagsSection() {
             const f = flip[id];
             const style = m || f
               ? ({
-                  ['--dx' as any]: `${m.x}px`,
-                  ['--dy' as any]: `${m.y}px`,
-                  ['--dr' as any]: `${m.r}deg`,
+                  ['--dx' as any]: `${m?.x ?? 0}px`,
+                  ['--dy' as any]: `${m?.y ?? 0}px`,
+                  ['--dr' as any]: `${m?.r ?? 0}deg`,
                   ['--fx' as any]: `${f?.x ?? 0}px`,
                   ['--fy' as any]: `${f?.y ?? 0}px`,
                 } as React.CSSProperties)

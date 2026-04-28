@@ -53,10 +53,15 @@ export function SubscribeSection() {
                         Get the next game by email.
                         <span className="microTextMuted">About once a month.</span>
                       </div>
-                      <div className="microOrg microOrgA" />
-                      <div className="microOrg microOrgB" />
-                      <div className="microOrg microOrgC" />
-                      <div className="microOrg microOrgD" />
+                      <div className="microOrg microOrgA">
+                        <div className="microOrgInner" />
+                      </div>
+                      <div className="microOrg microOrgB">
+                        <div className="microOrgInner" />
+                      </div>
+                      <div className="microOrg microOrgC">
+                        <div className="microOrgInner" />
+                      </div>
                     </div>
                   </div>
                 ) : null}
