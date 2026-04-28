@@ -27,6 +27,11 @@ export function App() {
     return () => window.removeEventListener('hashchange', onHash);
   }, []);
 
+  useEffect(() => {
+    // Hash-routing doesn't auto-scroll; do it explicitly.
+    window.scrollTo(0, 0);
+  }, [route]);
+
   if (route === 'projects') {
     return (
       <div className="page">

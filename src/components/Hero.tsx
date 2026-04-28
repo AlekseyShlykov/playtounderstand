@@ -8,9 +8,6 @@ export function Hero({ onOpenSubscribe }: { onOpenSubscribe: () => void }) {
           <h1 className="heroTitle">Play to Understand</h1>
           <p className="heroSubtitle">A small hub for learning through play.</p>
 
-          <p className="lede heroLede">
-            Small games about big ideas.
-          </p>
           <p className="sectionSub heroBody">
             New games drop about once a month — not more, sometimes less, because
             life is not a content calendar. Subscribe if you want a heads-up.
