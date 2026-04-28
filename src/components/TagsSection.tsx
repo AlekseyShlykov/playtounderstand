@@ -94,6 +94,7 @@ export function TagsSection() {
   const pendingFlip = useRef<null | { nextOrder: string[]; prevRects: Record<string, DOMRect> }>(
     null,
   );
+  const navRef = useRef<HTMLElement | null>(null);
 
   useEffect(() => {
     // Keep order in sync if new time tags appear.
@@ -117,14 +118,53 @@ export function TagsSection() {
     setRepelling(true);
 
     const ids = chips.map((c) => c.id);
+    const navEl = navRef.current;
+    const navRect = navEl?.getBoundingClientRect();
+
+    // Explode away from the tag-cloud center.
+    const cx = navRect ? navRect.left + navRect.width / 2 : window.innerWidth / 2;
+    const cy = navRect ? navRect.top + navRect.height / 2 : window.innerHeight / 2;
+
     const next: Record<string, { x: number; y: number; r: number }> = {};
     for (const id of ids) {
-      // Scatter, but keep it subtle enough to read.
-      const x = (Math.random() - 0.5) * 220;
-      const y = (Math.random() - 0.5) * 110;
+      const el = refs.current[id];
+      const rect = el?.getBoundingClientRect();
+      const ex = rect ? rect.left + rect.width / 2 : cx;
+      const ey = rect ? rect.top + rect.height / 2 : cy;
+
+      let vx = ex - cx;
+      let vy = ey - cy;
+      const len = Math.hypot(vx, vy) || 1;
+      vx /= len;
+      vy /= len;
+
+      // Add a tiny random wobble so paths differ.
+      const wobble = 0.35;
+      vx += (Math.random() - 0.5) * wobble;
+      vy += (Math.random() - 0.5) * wobble;
+      const len2 = Math.hypot(vx, vy) || 1;
+      vx /= len2;
+      vy /= len2;
+
+      const dist = 180 + Math.random() * 220; // “pretty far”, still on screen after clamping
+      let dx = vx * dist;
+      let dy = vy * dist;
+
+      // Clamp to viewport bounds so chips stay visible.
+      if (rect) {
+        const pad = 10;
+        const dxMin = -rect.left + pad;
+        const dxMax = window.innerWidth - rect.right - pad;
+        const dyMin = -rect.top + pad;
+        const dyMax = window.innerHeight - rect.bottom - pad;
+        dx = Math.max(dxMin, Math.min(dxMax, dx));
+        dy = Math.max(dyMin, Math.min(dyMax, dy));
+      }
+
       const r = (Math.random() - 0.5) * 8;
-      next[id] = { x, y, r };
+      next[id] = { x: dx, y: dy, r };
     }
+
     setMotion(next);
 
     // Phase 1: repel out & back (CSS). Phase 2: FLIP to shuffled order.
@@ -217,6 +257,9 @@ export function TagsSection() {
         </div>
 
         <nav
+          ref={(el) => {
+            navRef.current = el;
+          }}
           className={[
             'tagList',
             repelling ? 'tagListRepel' : '',

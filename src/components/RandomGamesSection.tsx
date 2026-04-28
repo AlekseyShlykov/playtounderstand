@@ -63,7 +63,6 @@ export function RandomGamesSection() {
       <div className="containerNarrow">
         <div className="sectionHeader">
           <div>
-            <p className="kicker">Two picks, served warm</p>
             <h2 className="h2" id="random-games-title">
               2 random games
             </h2>

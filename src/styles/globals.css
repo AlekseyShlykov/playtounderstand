@@ -1115,6 +1115,16 @@ a{color: inherit; text-decoration-thickness: 1px; text-underline-offset: 3px}
     right: calc(100% + 12px);
     transform: translate(0, -50%);
   }
+
+  /* cards: avoid clipped duration pill on mobile */
+  .cardTop{
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+  }
+  .badge{
+    align-self: flex-start;
+  }
 }
 
 @media (prefers-reduced-motion: reduce){
