@@ -43,7 +43,7 @@ export function SubscribeModal({
         aria-label="Subscribe"
       >
         <div className="modalHeader">
-          <p className="modalTitle">New game alerts</p>
+          <p className="modalTitle">Subscribe to new games (free)</p>
           <button
             ref={closeRef}
             type="button"

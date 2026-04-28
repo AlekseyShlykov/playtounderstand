@@ -88,7 +88,7 @@ export function Hero({ onOpenSubscribe }: { onOpenSubscribe: () => void }) {
               <span className="btnIconMobile" aria-hidden="true">
                 <MicroscopeIcon />
               </span>
-              New game alerts
+              Subscribe to new games (free)
             </button>
             <ButtonLink
               href="https://patreon.com/buildtounderstand"
