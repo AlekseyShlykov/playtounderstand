@@ -1098,6 +1098,7 @@ a{color: inherit; text-decoration-thickness: 1px; text-underline-offset: 3px}
   /* lens: mobile behaves differently (pure zoom, no fade) */
   .microLensInner{
     animation-name: lensZoomMobile;
+    animation-duration: 10s;
     transform-origin: 28% 72%;
   }
   .microText{
