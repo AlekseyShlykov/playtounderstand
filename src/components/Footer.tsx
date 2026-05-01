@@ -119,7 +119,7 @@ export function Footer() {
         </div>
         <nav className="footerLinks" aria-label="Elsewhere">
           <ExternalLink
-            href="https://patreon.com/buildtounderstand"
+            href="https://www.patreon.com/playtounderstand"
             ariaLabel="Patreon: Build to Understand"
             analyticsEvent="click_patreon"
             analyticsLabel="footer_patreon_link"

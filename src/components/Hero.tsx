@@ -100,7 +100,7 @@ export function Hero({ onOpenSubscribe }: { onOpenSubscribe: () => void }) {
               Subscribe to new games (free)
             </button>
             <ButtonLink
-              href="https://patreon.com/buildtounderstand"
+              href="https://www.patreon.com/playtounderstand"
               variant="secondary"
               external
               analyticsEvent="click_patreon"

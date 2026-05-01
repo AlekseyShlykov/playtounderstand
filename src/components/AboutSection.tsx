@@ -121,7 +121,7 @@ export function AboutSection() {
         <p className="aboutBody">
           Elsewhere on the internet:{' '}
           <ExternalLink
-            href="https://patreon.com/buildtounderstand"
+            href="https://www.patreon.com/playtounderstand"
             ariaLabel="Patreon: Build to Understand"
             analyticsEvent="click_patreon"
             analyticsLabel="about_patreon_link"

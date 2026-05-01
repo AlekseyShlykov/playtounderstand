@@ -1,7 +1,7 @@
 /* TEAM */
   Designer & developer: Alex Shlykov
   Site: https://playtounderstand.com
-  Patreon: https://patreon.com/buildtounderstand
+  Patreon: https://www.patreon.com/playtounderstand
   Blog: https://buildtounderstand.substack.com/
 
 /* SITE */

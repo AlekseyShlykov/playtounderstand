@@ -76,7 +76,7 @@ export function SubscribeSection() {
               Drop your email and I’ll send the next game when it’s actually
               done. Or if you’d rather throw a few coins, the project lives on{' '}
               <ExternalLink
-                href="https://patreon.com/buildtounderstand"
+                href="https://www.patreon.com/playtounderstand"
                 ariaLabel="Patreon: Build to Understand"
                 analyticsEvent="click_patreon"
                 analyticsLabel="subscribe_patreon_link"
