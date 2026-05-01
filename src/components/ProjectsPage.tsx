@@ -3,6 +3,14 @@ import { projects } from '../data/projects';
 import { ProjectCard } from './ProjectCard';
 import type { CanonicalTag } from './TagsSection';
 
+function toSnakeCaseLabel(input: string) {
+  return input
+    .trim()
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '_')
+    .replace(/^_+|_+$/g, '');
+}
+
 function parseFiltersFromHash(): { tag: CanonicalTag | null; duration: string | null } {
   const hash = window.location.hash || '';
   const idx = hash.indexOf('?');
@@ -53,7 +61,13 @@ export function ProjectsPage() {
       <section className="section" aria-labelledby="projects-page-title">
         <div className="containerNarrow">
           <div className="sectionHeader">
-            <a className="h2 projectsHomeLink" id="projects-page-title" href="/#/">
+            <a
+              className="h2 projectsHomeLink"
+              id="projects-page-title"
+              href="/#/"
+              data-analytics-event="button_click"
+              data-analytics-label="projects_home_link"
+            >
               Home
             </a>
             <p className="sectionSub">
@@ -73,6 +87,8 @@ export function ProjectsPage() {
                 setActiveTag(null);
                 setActiveDuration(null);
               }}
+              data-analytics-event="button_click"
+              data-analytics-label="projects_filter_all_button"
             >
               all
             </button>
@@ -82,6 +98,8 @@ export function ProjectsPage() {
                 type="button"
                 className={activeTag === t ? 'filterPill filterPillActive' : 'filterPill'}
                 onClick={() => setActiveTag((prev) => (prev === t ? null : t))}
+                data-analytics-event="button_click"
+                data-analytics-label={`projects_filter_tag_${t}_button`}
               >
                 {t}
               </button>
@@ -94,6 +112,8 @@ export function ProjectsPage() {
                   activeDuration === d ? 'filterPill filterPillActive' : 'filterPill'
                 }
                 onClick={() => setActiveDuration((prev) => (prev === d ? null : d))}
+                data-analytics-event="button_click"
+                data-analytics-label={`projects_filter_duration_${toSnakeCaseLabel(d)}_button`}
               >
                 {d}
               </button>

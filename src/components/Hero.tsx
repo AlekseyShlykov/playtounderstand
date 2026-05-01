@@ -64,6 +64,8 @@ export function Hero({ onOpenSubscribe }: { onOpenSubscribe: () => void }) {
                 onClick={() => setPouring(true)}
                 aria-label="Pour a little color"
                 title="Pour a little color"
+                data-analytics-event="button_click"
+                data-analytics-label="hero_pour_color_button"
               >
                 <FlaskIcon />
               </button>
@@ -77,13 +79,20 @@ export function Hero({ onOpenSubscribe }: { onOpenSubscribe: () => void }) {
           </p>
 
           <div className="heroCtas">
-            <ButtonLink href="#games" variant="primary">
+            <ButtonLink
+              href="#games"
+              variant="primary"
+              analyticsEvent="button_click"
+              analyticsLabel="hero_see_games_button"
+            >
               See games →
             </ButtonLink>
             <button
               type="button"
               className="btn btnSecondary"
               onClick={onOpenSubscribe}
+              data-analytics-event="button_click"
+              data-analytics-label="hero_subscribe_button"
             >
               <span className="btnIconMobile" aria-hidden="true">
                 <MicroscopeIcon />
@@ -94,6 +103,8 @@ export function Hero({ onOpenSubscribe }: { onOpenSubscribe: () => void }) {
               href="https://patreon.com/buildtounderstand"
               variant="secondary"
               external
+              analyticsEvent="click_patreon"
+              analyticsLabel="hero_patreon_button"
             >
               Support on Patreon ↗
             </ButtonLink>

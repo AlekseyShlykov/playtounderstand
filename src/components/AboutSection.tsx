@@ -49,6 +49,8 @@ export function AboutSection() {
       ref={(el) => {
         sectionRef.current = el;
       }}
+      data-analytics-event="button_click"
+      data-analytics-label="about_section_spotlight_area"
       style={
         spotlight
           ? ({
@@ -100,6 +102,8 @@ export function AboutSection() {
             }}
             aria-label="Flashlight mode"
             title="Flashlight mode"
+            data-analytics-event="button_click"
+            data-analytics-label="about_flashlight_button"
           >
             <FlashlightIcon />
           </button>
@@ -119,6 +123,8 @@ export function AboutSection() {
           <ExternalLink
             href="https://patreon.com/buildtounderstand"
             ariaLabel="Patreon: Build to Understand"
+            analyticsEvent="click_patreon"
+            analyticsLabel="about_patreon_link"
           >
             Patreon
           </ExternalLink>{' '}
@@ -126,6 +132,8 @@ export function AboutSection() {
           <ExternalLink
             href="https://buildtounderstand.substack.com/"
             ariaLabel="Blog (Substack)"
+            analyticsEvent="click_substack"
+            analyticsLabel="about_substack_link"
           >
             Blog
           </ExternalLink>{' '}

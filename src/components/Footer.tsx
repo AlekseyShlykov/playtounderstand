@@ -102,6 +102,8 @@ export function Footer() {
               }}
               aria-label="Wind"
               title="Wind"
+              data-analytics-event="button_click"
+              data-analytics-label="footer_wind_button"
             >
               <WindIcon />
             </button>
@@ -119,16 +121,26 @@ export function Footer() {
           <ExternalLink
             href="https://patreon.com/buildtounderstand"
             ariaLabel="Patreon: Build to Understand"
+            analyticsEvent="click_patreon"
+            analyticsLabel="footer_patreon_link"
           >
             Patreon
           </ExternalLink>
           <ExternalLink
             href="https://buildtounderstand.substack.com/"
             ariaLabel="Blog (Substack)"
+            analyticsEvent="click_substack"
+            analyticsLabel="footer_substack_link"
           >
             Blog
           </ExternalLink>
-          <a href="/#/projects">Games</a>
+          <a
+            href="/#/projects"
+            data-analytics-event="button_click"
+            data-analytics-label="footer_games_link"
+          >
+            Games
+          </a>
         </nav>
         <p className="small muted footerCopy">
           © {new Date().getFullYear()} — made slowly, with too much tea!

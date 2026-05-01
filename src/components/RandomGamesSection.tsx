@@ -77,6 +77,8 @@ export function RandomGamesSection() {
               className="linkButton"
               onClick={onShuffle}
               disabled={shuffling}
+              data-analytics-event="button_click"
+              data-analytics-label="random_games_shuffle_button"
             >
               Shuffle
             </button>

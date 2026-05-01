@@ -7,9 +7,18 @@ function svgToDataUrl(svg: string) {
   return `data:image/svg+xml,${encoded}`;
 }
 
+function toSnakeCaseLabel(input: string) {
+  return input
+    .trim()
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '_')
+    .replace(/^_+|_+$/g, '');
+}
+
 export function ProjectCard({ project }: { project: Project }) {
   const isComingSoon = project.status === 'coming-soon';
   const imgSrc = project.image || (project.imageSvg ? svgToDataUrl(project.imageSvg) : '');
+  const analyticsLabel = `${toSnakeCaseLabel(project.title)}_card`;
 
   const content = (
     <>
@@ -61,6 +70,8 @@ export function ProjectCard({ project }: { project: Project }) {
       target="_blank"
       rel="noreferrer"
       aria-label={`Open ${project.title}`}
+      data-analytics-event="click_game"
+      data-analytics-label={analyticsLabel}
     >
       {content}
     </a>

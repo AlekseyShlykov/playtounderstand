@@ -42,6 +42,8 @@ export function SubscribeSection() {
                   onClick={() => setZooming(true)}
                   aria-label="Zoom in (100×)"
                   title="Zoom in (100×)"
+                  data-analytics-event="button_click"
+                  data-analytics-label="subscribe_zoom_button"
                 >
                   <MicroscopeIcon />
                 </button>
@@ -76,6 +78,8 @@ export function SubscribeSection() {
               <ExternalLink
                 href="https://patreon.com/buildtounderstand"
                 ariaLabel="Patreon: Build to Understand"
+                analyticsEvent="click_patreon"
+                analyticsLabel="subscribe_patreon_link"
               >
                 Patreon
               </ExternalLink>

@@ -8,6 +8,14 @@ export type CanonicalTag =
   | 'biology'
   | 'psychology';
 
+function toSnakeCaseLabel(input: string) {
+  return input
+    .trim()
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '_')
+    .replace(/^_+|_+$/g, '');
+}
+
 const tags: { tag: CanonicalTag; label: string }[] = [
   { tag: 'ethics', label: 'ethics' },
   { tag: 'philosophy', label: 'philosophy' },
@@ -248,10 +256,17 @@ export function TagsSection() {
               onClick={startMagnet}
               aria-label="Repel tags"
               title="Repel tags"
+              data-analytics-event="button_click"
+              data-analytics-label="tags_repel_tags_button"
             >
               <MagnetIcon />
             </button>
-            <a className="btn btnSecondary" href="/#/projects">
+            <a
+              className="btn btnSecondary"
+              href="/#/projects"
+              data-analytics-event="button_click"
+              data-analytics-label="tags_see_all_games_button"
+            >
               See all games →
             </a>
           </div>
@@ -293,6 +308,12 @@ export function TagsSection() {
                 className={chip.className}
                 href={chip.href}
                 style={style}
+                data-analytics-event="button_click"
+                data-analytics-label={
+                  chip.id.startsWith('topic:')
+                    ? `tags_topic_${toSnakeCaseLabel(chip.label)}_chip`
+                    : `tags_duration_${toSnakeCaseLabel(chip.label)}_chip`
+                }
               >
                 {chip.label}
               </a>

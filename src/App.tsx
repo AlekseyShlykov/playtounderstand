@@ -35,7 +35,12 @@ export function App() {
   if (route === 'projects') {
     return (
       <div className="page">
-        <a className="skipLink" href="#main">
+        <a
+          className="skipLink"
+          href="#main"
+          data-analytics-event="button_click"
+          data-analytics-label="skip_to_content_link"
+        >
           Skip to content
         </a>
         <div id="main">
@@ -48,7 +53,12 @@ export function App() {
 
   return (
     <div className="page">
-      <a className="skipLink" href="#tags">
+      <a
+        className="skipLink"
+        href="#tags"
+        data-analytics-event="button_click"
+        data-analytics-label="skip_to_tags_link"
+      >
         Skip to tags
       </a>
       <Hero onOpenSubscribe={() => setSubscribeOpen(true)} />

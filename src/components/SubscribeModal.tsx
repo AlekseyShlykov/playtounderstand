@@ -35,6 +35,8 @@ export function SubscribeModal({
       onMouseDown={(e) => {
         if (e.target === e.currentTarget) onClose();
       }}
+      data-analytics-event="button_click"
+      data-analytics-label="subscribe_modal_overlay"
     >
       <div
         className="modal"
@@ -50,6 +52,8 @@ export function SubscribeModal({
             className="modalClose"
             onClick={onClose}
             aria-label="Close"
+            data-analytics-event="button_click"
+            data-analytics-label="subscribe_modal_close_button"
           >
             ×
           </button>
