@@ -1,171 +1,92 @@
 type OutboundEventName = 'patreon_click' | 'substack_click';
 
-function isAnchor(el: Element | null): el is HTMLAnchorElement {
-  return !!el && el.tagName === 'A';
-}
-
-function getBlock(el: Element): string {
-  const block =
-    el.closest<HTMLElement>('[data-block]')?.dataset.block ??
-    el.closest<HTMLElement>('section[id]')?.id ??
-    el.closest<HTMLElement>('[data-analytics-label]')?.dataset.analyticsLabel ??
-    'unknown';
-  return block || 'unknown';
-}
-
-function getAnchorFromEventTarget(target: EventTarget | null): HTMLAnchorElement | null {
-  if (!(target instanceof Element)) return null;
-  const a = target.closest('a');
-  return isAnchor(a) ? a : null;
-}
-
-function getSubstackCtaFromEventTarget(target: EventTarget | null): HTMLElement | null {
-  if (!(target instanceof Element)) return null;
-  return target.closest<HTMLElement>('[data-substack-cta]');
-}
-
-function getHostname(href: string): string | null {
+function getOutboundEventName(anchor: HTMLAnchorElement): OutboundEventName | null {
+  let url: URL;
   try {
-    return new URL(href, window.location.href).hostname.toLowerCase();
+    url = new URL(anchor.href, window.location.href);
   } catch {
     return null;
   }
-}
 
-function getLinkText(el: Element): string {
-  const text = (el.textContent || (el as HTMLElement).innerText || el.getAttribute('aria-label') || '')
-    .trim();
-  return text || '—';
+  const host = url.hostname.toLowerCase();
+  if (host === 'patreon.com' || host.endsWith('.patreon.com')) return 'patreon_click';
+  if (host === 'substack.com' || host.endsWith('.substack.com')) return 'substack_click';
+  return null;
 }
-
-function isPatreonLink(a: HTMLAnchorElement): boolean {
-  const host = getHostname(a.href);
-  return !!host && (host === 'patreon.com' || host.endsWith('.patreon.com'));
-}
-
-function isSubstackLink(a: HTMLAnchorElement): boolean {
-  const host = getHostname(a.href);
-  return !!host && (host === 'substack.com' || host.endsWith('.substack.com'));
-}
-
-function shouldLetBrowserOpenImmediately(e: MouseEvent, a: HTMLAnchorElement): boolean {
-  // New-tab intents: don't delay navigation.
-  if (a.target === '_blank') return true;
-  if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return true;
-  if (e.button && e.button !== 0) return true; // middle/right click
-  return false;
-}
-
-const RECENT_CLICK_WINDOW_MS = 1200;
-const recentClicks = new Map<string, number>();
 
 export function trackOutboundClick(eventName: OutboundEventName, element: HTMLAnchorElement) {
-  const href = element.href;
-  const key = `${eventName}::${href}`;
-  const now = Date.now();
-  const last = recentClicks.get(key) ?? 0;
-  if (now - last < RECENT_CLICK_WINDOW_MS) return;
-  recentClicks.set(key, now);
+  const gtagFn = (window as any).gtag as undefined | ((...args: any[]) => void);
+  if (typeof gtagFn !== 'function') return;
 
-  const basePayload: Record<string, unknown> = {
-    link_url: href,
-    link_text: getLinkText(element),
-  };
+  const link_url = element.href;
+  const link_text = (element.textContent ?? '').trim();
 
-  if (eventName === 'substack_click') {
-    (basePayload as any).block = getBlock(element);
-    // Temporary debugging (remove once validated in GA4 Realtime).
-    // eslint-disable-next-line no-console
-    console.log('[analytics] substack_click', basePayload);
-  }
-
-  window.gtag?.('event', eventName, basePayload);
+  gtagFn('event', eventName, {
+    link_url,
+    link_text,
+  });
 }
 
-export function trackSubstackClick(element: Element, linkUrl: string) {
-  const key = `substack_click::${linkUrl}`;
-  const now = Date.now();
-  const last = recentClicks.get(key) ?? 0;
-  if (now - last < RECENT_CLICK_WINDOW_MS) return;
-  recentClicks.set(key, now);
+function shouldDelayNavigation(e: MouseEvent, anchor: HTMLAnchorElement) {
+  if (e.defaultPrevented) return false;
+  if (e.button !== 0) return false; // not a left click
+  if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return false; // user intends new tab/window/etc
 
-  const payload = {
-    link_url: linkUrl,
-    link_text: getLinkText(element),
-    block: getBlock(element),
-  };
+  const target = (anchor.getAttribute('target') || '').toLowerCase();
+  if (target === '_blank') return false;
 
-  // Temporary debugging (remove once validated in GA4 Realtime).
-  // eslint-disable-next-line no-console
-  console.log('[analytics] substack_click', payload);
-
-  window.gtag?.('event', 'substack_click', payload);
+  return true;
 }
 
 export function initOutboundClickTracking() {
-  const handler = (e: MouseEvent) => {
-    const a = getAnchorFromEventTarget(e.target);
-    if (!a) {
-      // Non-link CTAs that open the subscription form (e.g. modal open buttons).
-      const cta = getSubstackCtaFromEventTarget(e.target);
-      if (!cta) return;
-      const url =
-        cta.dataset.substackUrl ||
-        (cta instanceof HTMLAnchorElement ? cta.href : '') ||
-        window.location.href;
-      trackSubstackClick(cta, url);
-      return;
-    }
+  const w = window as any;
+  if (w.__outboundClickTrackingInstalled) return;
+  w.__outboundClickTrackingInstalled = true;
 
-    const isPatreon = isPatreonLink(a);
-    const isSubstack = isSubstackLink(a) || a.href.toLowerCase().includes('substack');
-    if (!isPatreon && !isSubstack) return;
+  document.addEventListener(
+    'click',
+    (e) => {
+      const target = e.target as Element | null;
+      const anchor = target?.closest?.('a[href]') as HTMLAnchorElement | null;
+      if (!anchor) return;
 
-    const eventName: OutboundEventName = isPatreon ? 'patreon_click' : 'substack_click';
+      const eventName = getOutboundEventName(anchor);
+      if (!eventName) return;
 
-    // If we can rely on a new tab (or modified click), just fire-and-forget.
-    if (shouldLetBrowserOpenImmediately(e, a)) {
-      trackOutboundClick(eventName, a);
-      return;
-    }
+      const gtagFn = (window as any).gtag as undefined | ((...args: any[]) => void);
+      if (typeof gtagFn !== 'function') return;
 
-    // Same-tab navigation: prevent default and use GA callback + small delay.
-    e.preventDefault();
-    const href = a.href;
+      const link_url = anchor.href;
+      const link_text = (anchor.textContent ?? '').trim();
 
-    const navigate = () => {
-      window.location.href = href;
-    };
+      if (!shouldDelayNavigation(e, anchor)) {
+        gtagFn('event', eventName, { link_url, link_text });
+        return;
+      }
 
-    let done = false;
-    const finish = () => {
-      if (done) return;
-      done = true;
-      navigate();
-    };
+      // Ensure the hit is sent before navigating away.
+      e.preventDefault();
+      let navigated = false;
+      const href = anchor.href;
 
-    const payload: Record<string, unknown> = {
-      link_url: href,
-      link_text: getLinkText(a),
-      event_callback: finish,
-    };
-    if (eventName === 'substack_click') {
-      payload.block = getBlock(a);
-      // eslint-disable-next-line no-console
-      console.log('[analytics] substack_click', {
-        link_url: payload.link_url,
-        link_text: payload.link_text,
-        block: payload.block,
+      const navigate = () => {
+        if (navigated) return;
+        navigated = true;
+        window.location.assign(href);
+      };
+
+      const fallback = window.setTimeout(navigate, 180);
+
+      gtagFn('event', eventName, {
+        link_url,
+        link_text,
+        event_callback: () => {
+          window.clearTimeout(fallback);
+          navigate();
+        },
       });
-    }
-    window.gtag?.('event', eventName, payload);
-
-    window.setTimeout(finish, 180);
-  };
-
-  // Capture phase helps ensure we run before navigation.
-  document.addEventListener('click', handler, { capture: true });
-
-  return () => document.removeEventListener('click', handler, { capture: true } as any);
+    },
+    { capture: true },
+  );
 }
 
