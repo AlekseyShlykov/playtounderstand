@@ -33,14 +33,8 @@ function getHostname(href: string): string | null {
 }
 
 function getLinkText(el: Element): string {
-  const a = isAnchor(el) ? el : null;
-  const text = (
-    (el as HTMLElement).innerText ||
-    el.textContent ||
-    a?.getAttribute('aria-label') ||
-    el.getAttribute('aria-label') ||
-    ''
-  ).trim();
+  const text = (el.textContent || (el as HTMLElement).innerText || el.getAttribute('aria-label') || '')
+    .trim();
   return text || '—';
 }
 
@@ -73,10 +67,19 @@ export function trackOutboundClick(eventName: OutboundEventName, element: HTMLAn
   if (now - last < RECENT_CLICK_WINDOW_MS) return;
   recentClicks.set(key, now);
 
-  window.gtag?.('event', eventName, {
+  const basePayload: Record<string, unknown> = {
     link_url: href,
     link_text: getLinkText(element),
-  });
+  };
+
+  if (eventName === 'substack_click') {
+    (basePayload as any).block = getBlock(element);
+    // Temporary debugging (remove once validated in GA4 Realtime).
+    // eslint-disable-next-line no-console
+    console.log('[analytics] substack_click', basePayload);
+  }
+
+  window.gtag?.('event', eventName, basePayload);
 }
 
 export function trackSubstackClick(element: Element, linkUrl: string) {
@@ -122,8 +125,7 @@ export function initOutboundClickTracking() {
 
     // If we can rely on a new tab (or modified click), just fire-and-forget.
     if (shouldLetBrowserOpenImmediately(e, a)) {
-      if (eventName === 'substack_click') trackSubstackClick(a, a.href);
-      else trackOutboundClick(eventName, a);
+      trackOutboundClick(eventName, a);
       return;
     }
 
@@ -142,27 +144,21 @@ export function initOutboundClickTracking() {
       navigate();
     };
 
+    const payload: Record<string, unknown> = {
+      link_url: href,
+      link_text: getLinkText(a),
+      event_callback: finish,
+    };
     if (eventName === 'substack_click') {
-      const payload = {
-        link_url: href,
-        link_text: getLinkText(a),
-        block: getBlock(a),
-        event_callback: finish,
-      };
+      payload.block = getBlock(a);
       // eslint-disable-next-line no-console
       console.log('[analytics] substack_click', {
         link_url: payload.link_url,
         link_text: payload.link_text,
         block: payload.block,
       });
-      window.gtag?.('event', 'substack_click', payload);
-    } else {
-      window.gtag?.('event', eventName, {
-        link_url: href,
-        link_text: getLinkText(a),
-        event_callback: finish,
-      });
     }
+    window.gtag?.('event', eventName, payload);
 
     window.setTimeout(finish, 180);
   };
