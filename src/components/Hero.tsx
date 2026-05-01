@@ -93,6 +93,8 @@ export function Hero({ onOpenSubscribe }: { onOpenSubscribe: () => void }) {
               onClick={onOpenSubscribe}
               data-analytics-event="button_click"
               data-analytics-label="hero_subscribe_button"
+              data-substack-cta="open_subscribe_modal"
+              data-substack-url="https://buildtounderstand.substack.com/embed"
             >
               <span className="btnIconMobile" aria-hidden="true">
                 <MicroscopeIcon />

@@ -4,10 +4,24 @@ function isAnchor(el: Element | null): el is HTMLAnchorElement {
   return !!el && el.tagName === 'A';
 }
 
+function getBlock(el: Element): string {
+  const block =
+    el.closest<HTMLElement>('[data-block]')?.dataset.block ??
+    el.closest<HTMLElement>('section[id]')?.id ??
+    el.closest<HTMLElement>('[data-analytics-label]')?.dataset.analyticsLabel ??
+    'unknown';
+  return block || 'unknown';
+}
+
 function getAnchorFromEventTarget(target: EventTarget | null): HTMLAnchorElement | null {
   if (!(target instanceof Element)) return null;
   const a = target.closest('a');
   return isAnchor(a) ? a : null;
+}
+
+function getSubstackCtaFromEventTarget(target: EventTarget | null): HTMLElement | null {
+  if (!(target instanceof Element)) return null;
+  return target.closest<HTMLElement>('[data-substack-cta]');
 }
 
 function getHostname(href: string): string | null {
@@ -18,8 +32,15 @@ function getHostname(href: string): string | null {
   }
 }
 
-function getLinkText(a: HTMLAnchorElement): string {
-  const text = (a.innerText || a.textContent || a.getAttribute('aria-label') || '').trim();
+function getLinkText(el: Element): string {
+  const a = isAnchor(el) ? el : null;
+  const text = (
+    (el as HTMLElement).innerText ||
+    el.textContent ||
+    a?.getAttribute('aria-label') ||
+    el.getAttribute('aria-label') ||
+    ''
+  ).trim();
   return text || '—';
 }
 
@@ -58,19 +79,51 @@ export function trackOutboundClick(eventName: OutboundEventName, element: HTMLAn
   });
 }
 
+export function trackSubstackClick(element: Element, linkUrl: string) {
+  const key = `substack_click::${linkUrl}`;
+  const now = Date.now();
+  const last = recentClicks.get(key) ?? 0;
+  if (now - last < RECENT_CLICK_WINDOW_MS) return;
+  recentClicks.set(key, now);
+
+  const payload = {
+    link_url: linkUrl,
+    link_text: getLinkText(element),
+    block: getBlock(element),
+  };
+
+  // Temporary debugging (remove once validated in GA4 Realtime).
+  // eslint-disable-next-line no-console
+  console.log('[analytics] substack_click', payload);
+
+  window.gtag?.('event', 'substack_click', payload);
+}
+
 export function initOutboundClickTracking() {
   const handler = (e: MouseEvent) => {
     const a = getAnchorFromEventTarget(e.target);
-    if (!a) return;
+    if (!a) {
+      // Non-link CTAs that open the subscription form (e.g. modal open buttons).
+      const cta = getSubstackCtaFromEventTarget(e.target);
+      if (!cta) return;
+      const url =
+        cta.dataset.substackUrl ||
+        (cta instanceof HTMLAnchorElement ? cta.href : '') ||
+        window.location.href;
+      trackSubstackClick(cta, url);
+      return;
+    }
 
-    let eventName: OutboundEventName | null = null;
-    if (isPatreonLink(a)) eventName = 'patreon_click';
-    else if (isSubstackLink(a)) eventName = 'substack_click';
-    else return;
+    const isPatreon = isPatreonLink(a);
+    const isSubstack = isSubstackLink(a) || a.href.toLowerCase().includes('substack');
+    if (!isPatreon && !isSubstack) return;
+
+    const eventName: OutboundEventName = isPatreon ? 'patreon_click' : 'substack_click';
 
     // If we can rely on a new tab (or modified click), just fire-and-forget.
     if (shouldLetBrowserOpenImmediately(e, a)) {
-      trackOutboundClick(eventName, a);
+      if (eventName === 'substack_click') trackSubstackClick(a, a.href);
+      else trackOutboundClick(eventName, a);
       return;
     }
 
@@ -89,11 +142,27 @@ export function initOutboundClickTracking() {
       navigate();
     };
 
-    window.gtag?.('event', eventName, {
-      link_url: href,
-      link_text: getLinkText(a),
-      event_callback: finish,
-    });
+    if (eventName === 'substack_click') {
+      const payload = {
+        link_url: href,
+        link_text: getLinkText(a),
+        block: getBlock(a),
+        event_callback: finish,
+      };
+      // eslint-disable-next-line no-console
+      console.log('[analytics] substack_click', {
+        link_url: payload.link_url,
+        link_text: payload.link_text,
+        block: payload.block,
+      });
+      window.gtag?.('event', 'substack_click', payload);
+    } else {
+      window.gtag?.('event', eventName, {
+        link_url: href,
+        link_text: getLinkText(a),
+        event_callback: finish,
+      });
+    }
 
     window.setTimeout(finish, 180);
   };
